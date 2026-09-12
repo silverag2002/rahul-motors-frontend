@@ -1,175 +1,108 @@
 "use client";
 
 import Image from "next/image";
-import { Search, Phone, MessageCircle, ShieldCheck, Truck, Headphones, Award } from "lucide-react";
+import { ArrowDown, ArrowRight, MessageCircle, Phone, Search } from "lucide-react";
 import { CONTACT, telLink, whatsappLink, buildInquiryMessage } from "@/lib/contact";
 
-const trustBadges = [
-  { icon: ShieldCheck, label: "100% Genuine" },
-  { icon: Truck, label: "Pan-India Dispatch" },
-  { icon: Headphones, label: "Expert Support" },
-  { icon: Award, label: "30+ Years Trusted" },
-];
+const trustPoints = ["100% genuine", "Pan-India dispatch", "Expert part matching", "30+ years trusted"];
 
 export default function Hero() {
-  function focusSearch(e: React.FormEvent) {
+  function focusSearch(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const input = e.currentTarget as HTMLFormElement;
-    const data = new FormData(input);
-    const q = (data.get("q") as string)?.trim();
+    const q = new FormData(e.currentTarget).get("q")?.toString().trim() ?? "";
     const search = document.querySelector("#catalogue-search") as HTMLInputElement | null;
-    if (search) {
-      search.value = q || "";
-      search.dispatchEvent(new Event("input", { bubbles: true }));
-      search.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
+    if (!search) return;
+    window.dispatchEvent(new CustomEvent("rm:set-search", { detail: q }));
+    search.scrollIntoView({ behavior: "smooth", block: "center" });
+    search.focus({ preventScroll: true });
   }
 
   return (
-    <section className="relative pt-24 md:pt-28 pb-10 md:pb-14">
-      <div className="max-w-7xl mx-auto px-4 md:px-6">
-        <div
-          className="relative overflow-hidden rounded-2xl px-6 py-12 md:px-12 md:py-16 lg:py-20"
-          style={{
-            background: "linear-gradient(135deg, var(--accent-soft) 0%, var(--bg-muted) 100%)",
-            border: "1px solid var(--line)",
-          }}
-        >
-          <div className="grid lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-7">
-              <div
-                className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-5"
-                style={{
-                  background: "var(--bg-elev)",
-                  color: "var(--accent)",
-                  border: "1px solid var(--line)",
-                }}
-              >
-                <span className="h-1.5 w-1.5 rounded-full" style={{ background: "var(--accent)" }} />
-                Trusted since 1995 · 1,400+ parts in stock
-              </div>
+    <section className="pt-20 md:pt-24 pb-8 md:pb-12">
+      <div className="shell">
+        <div className="hero-surface rounded-[1.5rem] md:rounded-[2rem]">
+          <div className="flex items-center justify-between px-5 md:px-10 py-4 border-b border-white/10 text-[10px] md:text-xs uppercase tracking-[0.16em] text-white/60">
+            <span>Established 1995</span>
+            <span className="hidden sm:inline">Kolkata · Serving all India</span>
+            <span className="text-[#e2bf72]">Genuine parts only</span>
+          </div>
 
-              <h1
-                className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.05]"
-                style={{ color: "var(--ink)" }}
-              >
+          <div className="grid lg:grid-cols-12 min-h-[560px] md:min-h-[620px]">
+            <div className="lg:col-span-8 px-5 py-12 sm:px-8 md:px-10 md:py-16 lg:py-20 flex flex-col justify-center">
+              <h1 className="hero-reveal font-editorial text-[3.65rem] sm:text-7xl md:text-[5.65rem] lg:text-[6.5rem] leading-[0.82] tracking-[-0.035em] max-w-[900px] text-balance">
                 Genuine auto parts,
-                <br />
-                <span style={{ color: "var(--accent)" }}>delivered fast.</span>
+                <span className="block text-[#e2bf72] italic">delivered fast.</span>
               </h1>
 
-              <p
-                className="mt-4 md:mt-5 text-base md:text-lg max-w-xl"
-                style={{ color: "var(--ink-soft)" }}
-              >
-                Sensors, switches, pumps, filters and more — sourced direct from OEM channels.
-                Browse the catalogue and inquire in one tap.
-              </p>
+              <div className="hero-reveal hero-reveal-2 mt-9 md:mt-12 grid md:grid-cols-[1fr_auto] gap-6 md:items-end max-w-4xl">
+                <p className="max-w-[55ch] text-sm md:text-base leading-7 text-white/65">
+                  Sensors, switches, pumps, filters and more—sourced direct from OEM channels and matched by people who know the part.
+                </p>
+                <a href="#catalogue" className="group inline-flex items-center gap-2 text-sm font-semibold text-[#e2bf72] underline underline-offset-8 decoration-white/20 hover:decoration-[#e2bf72] transition-colors">
+                  Browse catalogue
+                  <ArrowDown className="h-4 w-4 transition-transform group-hover:translate-y-1" />
+                </a>
+              </div>
 
-              <form
-                onSubmit={focusSearch}
-                className="mt-7 flex flex-col sm:flex-row gap-2 max-w-xl"
-              >
-                <div
-                  className="flex-1 flex items-center gap-2 h-12 px-4 rounded-lg"
-                  style={{ background: "var(--bg-elev)", border: "1px solid var(--line-strong)" }}
-                >
-                  <Search className="h-4 w-4 shrink-0" style={{ color: "var(--ink-soft)" }} />
-                  <input
-                    name="q"
-                    type="text"
-                    placeholder="Search for ABS sensor, brake pads, oil filter…"
-                    className="flex-1 bg-transparent text-sm outline-none"
-                    style={{ color: "var(--ink)" }}
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="h-12 px-6 rounded-lg text-sm font-semibold transition-opacity hover:opacity-90"
-                  style={{ background: "var(--ink)", color: "var(--bg)" }}
-                >
-                  Search
+              <form onSubmit={focusSearch} className="hero-reveal hero-reveal-3 hero-search mt-8 md:mt-10 flex items-center p-1.5 max-w-3xl rounded-xl text-[#171816]">
+                <Search className="ml-3 h-4 w-4 shrink-0 text-[#77786f]" />
+                <input
+                  name="q"
+                  type="search"
+                  aria-label="Search parts, brands, and models"
+                  placeholder="Search ABS sensor, brake pads, oil filter…"
+                  className="min-w-0 flex-1 h-12 px-3 bg-transparent text-sm outline-none placeholder:text-[#77786f]"
+                />
+                <button type="submit" aria-label="Find a part" className="h-12 px-4 md:px-6 rounded-lg bg-[#d96522] text-white text-sm font-semibold inline-flex items-center gap-2 hover:bg-[#bf541c] transition-colors">
+                  <span className="hidden sm:inline">Find a part</span>
+                  <ArrowRight className="h-4 w-4" />
                 </button>
               </form>
 
-              <div className="mt-5 flex flex-wrap items-center gap-3 text-sm">
-                <span style={{ color: "var(--ink-soft)" }}>Or inquire directly:</span>
+              <div className="hero-reveal hero-reveal-3 mt-5 flex flex-wrap items-center gap-x-5 gap-y-3 text-xs md:text-sm text-white/60">
+                <span>Need help matching a part?</span>
                 <a
                   href={whatsappLink(buildInquiryMessage({ name: "General inquiry" }))}
                   target="_blank"
                   rel="noopener"
-                  className="inline-flex items-center gap-1.5 font-medium"
-                  style={{ color: "var(--whatsapp)" }}
+                  className="inline-flex items-center gap-2 font-semibold text-[#68dc95] hover:text-[#8de9ae] transition-colors"
                 >
-                  <MessageCircle className="h-4 w-4" />
-                  WhatsApp
+                  <MessageCircle className="h-4 w-4" /> WhatsApp
                 </a>
-                <span style={{ color: "var(--line-strong)" }}>·</span>
-                <a
-                  href={telLink(CONTACT.phones[0].tel)}
-                  className="inline-flex items-center gap-1.5 font-medium"
-                  style={{ color: "var(--accent)" }}
-                >
-                  <Phone className="h-4 w-4" />
-                  {CONTACT.phones[0].number}
+                <a href={telLink(CONTACT.phones[0].tel)} className="inline-flex items-center gap-2 font-semibold text-white hover:text-[#e2bf72] transition-colors">
+                  <Phone className="h-4 w-4" /> {CONTACT.phones[0].number}
                 </a>
               </div>
             </div>
 
-            <div className="lg:col-span-5 hidden lg:flex justify-center">
-              <div
-                className="relative aspect-square w-full max-w-sm rounded-2xl flex items-center justify-center overflow-hidden"
-                style={{
-                  background: "var(--bg-elev)",
-                  border: "1px solid var(--line-strong)",
-                  boxShadow: "var(--shadow-lg)",
-                }}
-              >
-                <div
-                  className="absolute inset-0 opacity-50"
-                  style={{
-                    background:
-                      "radial-gradient(70% 50% at 50% 40%, var(--accent-soft) 0%, transparent 70%)",
-                  }}
-                />
+            <div className="hidden lg:flex lg:col-span-4 relative items-center justify-center border-l border-white/10">
+              <div className="absolute h-[310px] w-[310px] rounded-full border border-[#d7b466]/30" />
+              <div className="absolute h-[238px] w-[238px] rounded-full border border-white/10" />
+              <div className="relative h-48 w-48 rounded-full bg-[#f7f2e8] flex items-center justify-center shadow-[0_30px_60px_-24px_rgba(0,0,0,.8)]">
                 <Image
-                  src="/logo.png"
-                  alt="Rahul Motors"
-                  width={240}
-                  height={160}
-                  className="relative"
+                  src="/logo.webp"
+                  alt="Rahul Motors emblem"
+                  width={142}
+                  height={139}
+                  className="hero-mark"
                   priority
+                  sizes="142px"
                 />
-                <div
-                  className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-xs"
-                  style={{ color: "var(--ink-soft)" }}
-                >
-                  <span className="font-medium">Est. 1995</span>
-                  <span>Genuine OEM</span>
-                </div>
+              </div>
+              <div className="absolute bottom-10 left-8 right-8 flex justify-between text-[10px] uppercase tracking-[.16em] text-white/45">
+                <span>RM / 1995</span>
+                <span>OEM supply</span>
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-3">
-          {trustBadges.map((b) => (
-            <div
-              key={b.label}
-              className="flex items-center gap-3 px-4 py-3 rounded-xl"
-              style={{ background: "var(--bg-elev)", border: "1px solid var(--line)" }}
-            >
-              <div
-                className="h-9 w-9 rounded-lg flex items-center justify-center shrink-0"
-                style={{ background: "var(--accent-soft)", color: "var(--accent)" }}
-              >
-                <b.icon className="h-4 w-4" />
+          <div className="grid grid-cols-2 lg:grid-cols-4 border-t border-white/10">
+            {trustPoints.map((item, index) => (
+              <div key={item} className={`px-5 md:px-8 py-4 text-[10px] sm:text-xs uppercase tracking-[.12em] text-white/70 ${index % 2 ? "border-l" : ""} lg:border-l first:lg:border-l-0 border-white/10`}>
+                <span className="mr-2 inline-block h-1.5 w-1.5 rotate-45 bg-[#e2bf72]" aria-hidden="true" />{item}
               </div>
-              <div className="text-sm font-medium" style={{ color: "var(--ink-2)" }}>
-                {b.label}
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>

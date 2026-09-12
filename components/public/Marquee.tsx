@@ -1,65 +1,40 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ChevronRight, Zap } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { publicApi, PublicCategory } from "@/lib/publicApi";
 
 export default function Marquee() {
-  const [cats, setCats] = useState<PublicCategory[]>([]);
+  const [categories, setCategories] = useState<PublicCategory[]>([]);
 
   useEffect(() => {
-    publicApi.listCategories().then((c) => setCats(c.slice(0, 12))).catch(() => setCats([]));
+    publicApi.listCategories().then((items) => setCategories(items.slice(0, 12))).catch(() => setCategories([]));
   }, []);
 
-  if (cats.length === 0) return null;
+  if (categories.length === 0) return null;
 
   return (
-    <section className="py-8 md:py-10">
-      <div className="max-w-7xl mx-auto px-4 md:px-6">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <Zap className="h-4 w-4" style={{ color: "var(--accent)" }} />
-            <h2 className="text-base md:text-lg font-semibold" style={{ color: "var(--ink)" }}>
-              Shop by category
-            </h2>
-          </div>
-          <a
-            href="#categories"
-            className="inline-flex items-center gap-1 text-sm font-medium hover:underline underline-offset-4"
-            style={{ color: "var(--accent)" }}
-          >
-            View all
-            <ChevronRight className="h-4 w-4" />
-          </a>
+    <section className="py-12 md:py-20" id="featured-categories">
+      <div className="shell">
+        <div className="flex items-end justify-between gap-5 mb-7 md:mb-10">
+          <h2 className="font-editorial text-4xl md:text-6xl leading-none tracking-[-.03em]" style={{ color: "var(--ink)" }}>Find it by category.</h2>
+          <a href="#categories" className="hidden sm:inline-flex items-center gap-2 pb-1 text-xs font-bold uppercase tracking-[.12em] hover:text-[var(--accent)] transition-colors" style={{ color: "var(--ink-soft)" }}>View all <ArrowRight className="h-4 w-4" /></a>
         </div>
 
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 md:gap-3">
-          {cats.map((c) => (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 border-t border-l" style={{ borderColor: "var(--line)" }}>
+          {categories.map((category) => (
             <a
-              key={c.id}
-              href={`#catalogue`}
-              onClick={() => {
-                const ev = new CustomEvent("rm:select-category", { detail: c.id });
-                window.dispatchEvent(ev);
-              }}
-              className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl transition-colors hover:bg-[var(--bg-muted)] text-center"
-              style={{ background: "var(--bg-elev)", border: "1px solid var(--line)" }}
+              key={category.id}
+              href="#catalogue"
+              onClick={() => window.dispatchEvent(new CustomEvent("rm:select-category", { detail: category.id }))}
+              className="group min-h-24 md:min-h-28 p-4 md:p-5 flex flex-col justify-between border-r border-b transition-colors hover:bg-[var(--bg-elev)]"
+              style={{ borderColor: "var(--line)" }}
             >
-              <div
-                className="h-10 w-10 rounded-full flex items-center justify-center text-xs font-bold"
-                style={{
-                  background: "var(--accent-soft)",
-                  color: "var(--accent)",
-                }}
-              >
-                {c.name.charAt(0).toUpperCase()}
-              </div>
-              <div
-                className="text-xs font-medium line-clamp-2 leading-tight"
-                style={{ color: "var(--ink-2)" }}
-              >
-                {c.name}
-              </div>
+              <span className="text-[10px] uppercase tracking-[.16em]" style={{ color: "var(--ink-faint)" }}>Shop parts</span>
+              <span className="flex items-end justify-between gap-3 text-sm md:text-base font-semibold" style={{ color: "var(--ink)" }}>
+                <span className="line-clamp-2">{category.name}</span>
+                <ArrowRight className="h-4 w-4 shrink-0 text-[var(--accent)] transition-transform group-hover:translate-x-1" />
+              </span>
             </a>
           ))}
         </div>

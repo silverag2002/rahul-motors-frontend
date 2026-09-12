@@ -1,4 +1,3 @@
-import axios from "axios";
 import { API_BASE_URL } from "@/lib/constants";
 
 export interface PublicImage {
@@ -35,12 +34,29 @@ export interface PublicProductsMeta {
   pageCount: number;
 }
 
-const api = axios.create({ baseURL: API_BASE_URL });
+let categoriesRequest: Promise<PublicCategory[]> | null = null;
+
+async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  const response = await fetch(`${API_BASE_URL.replace(/\/$/, "")}${path}`, init);
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    const message = payload?.error?.message || `Request failed with status ${response.status}`;
+    throw new Error(message);
+  }
+  return payload;
+}
 
 export const publicApi = {
   async listCategories(): Promise<PublicCategory[]> {
-    const res = await api.get("/public/categories");
-    return res.data?.data ?? [];
+    if (!categoriesRequest) {
+      categoriesRequest = request<{ data?: PublicCategory[] }>("/public/categories")
+        .then((payload) => payload.data ?? [])
+        .catch((error) => {
+          categoriesRequest = null;
+          throw error;
+        });
+    }
+    return categoriesRequest;
   },
 
   async listProducts(params: {
@@ -51,20 +67,30 @@ export const publicApi = {
     page?: number;
     pageSize?: number;
   }): Promise<{ data: PublicProduct[]; meta: PublicProductsMeta }> {
-    const res = await api.get("/public/products", {
-      params: {
-        ...params,
-        page: params.page ?? 1,
-        pageSize: params.pageSize ?? 24,
-      },
+    const query = new URLSearchParams();
+    Object.entries({ ...params, page: params.page ?? 1, pageSize: params.pageSize ?? 24 }).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== "") query.set(key, String(value));
     });
-    return { data: res.data?.data ?? [], meta: res.data?.meta };
+    const payload = await request<{ data?: PublicProduct[]; meta?: PublicProductsMeta }>(`/public/products?${query}`);
+    return { data: payload.data ?? [], meta: payload.meta as PublicProductsMeta };
   },
 
   imageUrl(p: PublicProduct): string | null {
     const img = p.images?.[0];
     if (!img) return null;
-    return img.formats?.medium?.url || img.formats?.small?.url || img.url || null;
+    return img.formats?.small?.url || img.formats?.thumbnail?.url || img.formats?.medium?.url || img.url || null;
+  },
+
+  imageSrcSet(p: PublicProduct): string | null {
+    const img = p.images?.[0];
+    if (!img?.formats) return null;
+    const sources = [
+      img.formats.thumbnail?.url && `${img.formats.thumbnail.url} 240w`,
+      img.formats.small?.url && `${img.formats.small.url} 500w`,
+      img.formats.medium?.url && `${img.formats.medium.url} 750w`,
+      img.formats.large?.url && `${img.formats.large.url} 1000w`,
+    ].filter(Boolean);
+    return sources.length ? sources.join(", ") : null;
   },
 
   async submitInquiry(payload: {
@@ -78,7 +104,11 @@ export const publicApi = {
     partNo?: string;
     carName?: string;
   }): Promise<{ ok: true }> {
-    const res = await api.post("/public/inquiry", payload);
-    return res.data?.data ?? { ok: true };
+    const response = await request<{ data?: { ok: true } }>("/public/inquiry", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    return response.data ?? { ok: true };
   },
 };

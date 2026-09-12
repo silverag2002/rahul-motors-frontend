@@ -3,15 +3,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Menu, X, Phone, Search, MessageCircle } from "lucide-react";
+import { ArrowUpRight, Menu, X, Phone, Search } from "lucide-react";
 import ThemeToggle from "@/components/public/ThemeToggle";
 import { CONTACT, telLink, whatsappLink, buildInquiryMessage } from "@/lib/contact";
 
 const links = [
-  { href: "#catalogue", label: "Shop" },
+  { href: "#catalogue", label: "Catalogue" },
   { href: "#categories", label: "Categories" },
   { href: "#brands", label: "Brands" },
-  { href: "#about", label: "About" },
+  { href: "#about", label: "Our story" },
   { href: "#contact", label: "Contact" },
 ];
 
@@ -20,121 +20,96 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
+    const onScroll = () => setScrolled(window.scrollY > 12);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    if (!open) return;
+    const close = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", close);
+    return () => window.removeEventListener("keydown", close);
+  }, [open]);
+
+  function openSearch() {
+    const el = document.querySelector("#catalogue-search") as HTMLInputElement | null;
+    el?.scrollIntoView({ behavior: "smooth", block: "center" });
+    window.setTimeout(() => el?.focus({ preventScroll: true }), 450);
+  }
+
   return (
     <header
-      className="fixed top-0 inset-x-0 z-50 transition-all duration-200"
+      className="fixed top-0 inset-x-0 z-50 transition-[background-color,border-color,box-shadow] duration-300"
       style={{
-        backgroundColor: scrolled ? "var(--bg-elev)" : "var(--bg)",
-        borderBottom: `1px solid ${scrolled ? "var(--line)" : "transparent"}`,
+        backgroundColor: scrolled || open ? "color-mix(in oklab, var(--bg-elev) 94%, transparent)" : "var(--bg)",
+        borderBottom: `1px solid ${scrolled || open ? "var(--line)" : "transparent"}`,
         boxShadow: scrolled ? "var(--shadow-sm)" : "none",
+        backdropFilter: scrolled || open ? "blur(14px)" : "none",
       }}
     >
-      <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 flex items-center gap-4">
-        <Link href="/" className="flex items-center gap-2.5 shrink-0">
-          <span
-            className="h-9 w-9 rounded-lg flex items-center justify-center overflow-hidden"
-            style={{ background: "var(--bg-muted)" }}
-          >
-            <Image src="/logo.png" alt="Rahul Motors" width={28} height={28} className="object-contain" priority />
+      <div className="shell h-[72px] flex items-center gap-5">
+        <Link href="/" className="flex items-center gap-3 shrink-0" aria-label="Rahul Motors home">
+          <span className="h-10 w-10 rounded-full grid place-items-center overflow-hidden border" style={{ background: "var(--bg-elev)", borderColor: "var(--line)" }}>
+            <Image src="/logo.webp" alt="" width={29} height={28} priority sizes="29px" />
           </span>
-          <div className="leading-tight">
-            <div className="text-base font-semibold" style={{ color: "var(--ink)" }}>
-              Rahul Motors
-            </div>
-            <div className="text-[10px] uppercase tracking-wider" style={{ color: "var(--ink-faint)" }}>
-              Auto Parts Store
-            </div>
-          </div>
+          <span className="leading-none">
+            <span className="font-editorial block text-xl font-bold tracking-[-.02em]" style={{ color: "var(--ink)" }}>Rahul Motors</span>
+            <span className="mt-1 block text-[8px] uppercase tracking-[.22em]" style={{ color: "var(--ink-faint)" }}>Genuine automotive parts</span>
+          </span>
         </Link>
 
-        <button
-          onClick={() => {
-            const el = document.querySelector("#catalogue-search") as HTMLInputElement | null;
-            el?.focus();
-            el?.scrollIntoView({ behavior: "smooth", block: "center" });
-          }}
-          className="hidden md:flex flex-1 max-w-xl items-center gap-2 h-10 px-4 rounded-lg text-sm"
-          style={{
-            background: "var(--bg-muted)",
-            color: "var(--ink-soft)",
-            border: "1px solid var(--line)",
-          }}
-        >
-          <Search className="h-4 w-4" />
-          <span>Search parts, brands, models…</span>
-        </button>
-
-        <nav className="hidden lg:flex items-center gap-1 ml-auto">
-          {links.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              className="px-3 py-2 text-sm font-medium rounded-md transition-colors hover:bg-[var(--bg-muted)]"
-              style={{ color: "var(--ink-2)" }}
-            >
-              {l.label}
+        <nav className="hidden xl:flex items-center gap-0 ml-auto" aria-label="Primary navigation">
+          {links.map((link) => (
+            <a key={link.href} href={link.href} className="px-3.5 py-2 text-xs font-semibold transition-colors hover:text-[var(--accent)]" style={{ color: "var(--ink-2)" }}>
+              {link.label}
             </a>
           ))}
         </nav>
 
-        <div className="flex items-center gap-2 ml-auto lg:ml-2">
+        <div className="ml-auto xl:ml-3 flex items-center gap-2">
+          <button onClick={openSearch} className="hidden md:inline-flex h-10 items-center gap-2 px-3 text-xs font-semibold border-b transition-colors hover:text-[var(--accent)]" style={{ color: "var(--ink-2)", borderColor: "var(--line-strong)" }} aria-label="Jump to product search">
+            <Search className="h-4 w-4" /> Search parts
+          </button>
           <a
             href={whatsappLink(buildInquiryMessage({ name: "General inquiry" }))}
             target="_blank"
             rel="noopener"
-            className="hidden md:inline-flex items-center gap-2 px-4 h-10 rounded-lg text-sm font-medium transition-colors"
-            style={{ background: "var(--accent)", color: "var(--accent-ink)" }}
+            className="hidden sm:inline-flex h-10 items-center gap-2 px-4 rounded-lg text-xs font-bold uppercase tracking-[.08em] transition-colors hover:bg-[var(--ink)]"
+            style={{ background: "var(--accent)", color: "#fff" }}
           >
-            <MessageCircle className="h-4 w-4" />
-            Inquire
+            Inquire <ArrowUpRight className="h-3.5 w-3.5" />
           </a>
           <ThemeToggle />
           <button
-            className="lg:hidden h-10 w-10 rounded-lg flex items-center justify-center"
-            style={{ border: "1px solid var(--line-strong)" }}
-            onClick={() => setOpen((v) => !v)}
-            aria-label="Toggle menu"
+            className="xl:hidden h-10 w-10 rounded-full flex items-center justify-center border"
+            style={{ borderColor: "var(--line-strong)", color: "var(--ink)" }}
+            onClick={() => setOpen((value) => !value)}
+            aria-expanded={open}
+            aria-controls="mobile-navigation"
+            aria-label={open ? "Close menu" : "Open menu"}
           >
             {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </button>
         </div>
       </div>
 
-      <div
-        className="lg:hidden overflow-hidden transition-[max-height] duration-300"
-        style={{
-          maxHeight: open ? "480px" : "0px",
-          borderTop: open ? "1px solid var(--line)" : "1px solid transparent",
-          background: "var(--bg-elev)",
-        }}
-      >
-        <nav className="px-4 py-3 flex flex-col gap-1">
-          {links.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              onClick={() => setOpen(false)}
-              className="px-3 py-2.5 rounded-md text-sm font-medium"
-              style={{ color: "var(--ink-2)" }}
-            >
-              {l.label}
-            </a>
-          ))}
-          <a
-            href={telLink(CONTACT.phones[0].tel)}
-            className="mt-2 inline-flex items-center justify-center gap-2 px-4 h-11 rounded-lg text-sm font-semibold"
-            style={{ background: "var(--accent)", color: "var(--accent-ink)" }}
-          >
-            <Phone className="h-4 w-4" /> {CONTACT.phones[0].number}
-          </a>
-        </nav>
-      </div>
+      {open && (
+        <div id="mobile-navigation" className="xl:hidden animate-fade-in" style={{ background: "var(--bg-elev)" }}>
+          <nav className="shell py-4 border-t" style={{ borderColor: "var(--line)" }} aria-label="Mobile navigation">
+            {links.map((link) => (
+              <a key={link.href} href={link.href} onClick={() => setOpen(false)} className="group flex items-center justify-between py-3.5 border-b text-base font-semibold" style={{ color: "var(--ink)", borderColor: "var(--line)" }}>
+                {link.label}<ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+              </a>
+            ))}
+            <div className="grid grid-cols-2 gap-2 mt-4">
+              <a href={telLink(CONTACT.phones[0].tel)} className="h-11 rounded-lg inline-flex items-center justify-center gap-2 text-xs font-bold border" style={{ borderColor: "var(--line-strong)", color: "var(--ink)" }}><Phone className="h-4 w-4" /> Call us</a>
+              <button onClick={() => { setOpen(false); openSearch(); }} className="h-11 rounded-lg inline-flex items-center justify-center gap-2 text-xs font-bold" style={{ background: "var(--ink)", color: "var(--bg)" }}><Search className="h-4 w-4" /> Find a part</button>
+            </div>
+          </nav>
+        </div>
+      )}
     </header>
   );
 }

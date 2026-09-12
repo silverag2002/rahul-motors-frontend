@@ -4,7 +4,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { Moon, Sun } from "lucide-react";
 
 export default function ThemeToggle() {
-  const { theme, toggle } = useTheme();
+  const { toggle } = useTheme();
   return (
     <button
       onClick={toggle}
@@ -13,13 +13,11 @@ export default function ThemeToggle() {
       style={{ borderColor: "var(--line-strong)" }}
     >
       <Sun
-        className="h-4 w-4 absolute transition-all duration-500 rotate-0 scale-100 data-[hidden=true]:rotate-90 data-[hidden=true]:scale-0"
-        data-hidden={theme === "dark"}
+        className="theme-sun h-4 w-4 absolute transition-all duration-300"
         style={{ color: "var(--ink)" }}
       />
       <Moon
-        className="h-4 w-4 absolute transition-all duration-500 rotate-0 scale-100 data-[hidden=true]:-rotate-90 data-[hidden=true]:scale-0"
-        data-hidden={theme === "light"}
+        className="theme-moon h-4 w-4 absolute transition-all duration-300"
         style={{ color: "var(--ink)" }}
       />
     </button>

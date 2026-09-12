@@ -10,7 +10,7 @@ export default function WhatsAppFab() {
       target="_blank"
       rel="noopener"
       aria-label="Chat on WhatsApp"
-      className="fixed bottom-5 right-5 z-40 group"
+      className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-40 group"
     >
       <span
         className="absolute inset-0 rounded-full"
@@ -20,12 +20,12 @@ export default function WhatsAppFab() {
         }}
       />
       <span
-        className="relative flex items-center gap-2 h-13 pl-3.5 pr-4 rounded-full transition-transform group-hover:scale-105"
+        className="relative flex items-center gap-2 pl-3.5 pr-4 rounded-full transition-transform group-hover:-translate-y-1"
         style={{
           background: "var(--whatsapp)",
-          color: "#0c2415",
-          boxShadow: "0 10px 30px -8px rgba(37, 211, 102, 0.5)",
-          height: "52px",
+          color: "#092416",
+          boxShadow: "0 16px 34px -14px rgba(20, 80, 43, 0.65)",
+          height: "48px",
         }}
       >
         <MessageCircle className="h-5 w-5" />

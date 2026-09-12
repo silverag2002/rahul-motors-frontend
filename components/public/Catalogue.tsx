@@ -39,8 +39,16 @@ export default function Catalogue() {
       const id = (e as CustomEvent<number>).detail;
       if (typeof id === "number") setCategoryId(id);
     }
+    function onSearch(e: Event) {
+      const query = (e as CustomEvent<string>).detail;
+      if (typeof query === "string") setSearch(query);
+    }
     window.addEventListener("rm:select-category", onSelect as EventListener);
-    return () => window.removeEventListener("rm:select-category", onSelect as EventListener);
+    window.addEventListener("rm:set-search", onSearch as EventListener);
+    return () => {
+      window.removeEventListener("rm:select-category", onSelect as EventListener);
+      window.removeEventListener("rm:set-search", onSearch as EventListener);
+    };
   }, []);
 
   useEffect(() => {
@@ -65,13 +73,11 @@ export default function Catalogue() {
 
         if (firstLoadRef.current) {
           firstLoadRef.current = false;
-          const { data: wider } = await publicApi.listProducts({ pageSize: 100 });
-          if (!cancelled) {
-            const unique = Array.from(
-              new Set(wider.map((p) => (p.brand || "").trim()).filter(Boolean))
-            ).sort();
+          publicApi.listProducts({ pageSize: 100 }).then(({ data: wider }) => {
+            if (cancelled) return;
+            const unique = Array.from(new Set(wider.map((p) => (p.brand || "").trim()).filter(Boolean))).sort();
             setBrands(unique);
-          }
+          }).catch(() => undefined);
         }
       } catch {
         if (!cancelled) {
@@ -120,30 +126,30 @@ export default function Catalogue() {
   );
 
   return (
-    <section id="catalogue" className="py-12 md:py-16" style={{ background: "var(--bg-subtle)" }}>
-      <div className="max-w-7xl mx-auto px-4 md:px-6">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-6">
+    <section id="catalogue" className="py-14 md:py-24 border-y" style={{ background: "var(--bg-subtle)", borderColor: "var(--line)" }}>
+      <div className="shell">
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-7 mb-9 md:mb-12">
           <div>
-            <h2 className="text-2xl md:text-3xl font-bold" style={{ color: "var(--ink)" }}>
-              Shop all parts
+            <h2 className="font-editorial text-5xl md:text-7xl leading-none tracking-[-.035em]" style={{ color: "var(--ink)" }}>
+              The parts counter.
             </h2>
-            <p className="mt-1.5 text-sm" style={{ color: "var(--ink-soft)" }}>
-              {total.toLocaleString()} products · Filter, search and inquire in one tap
+            <p className="mt-4 text-sm md:text-base" style={{ color: "var(--ink-soft)" }}>
+              <span className="font-semibold tabular-nums" style={{ color: "var(--ink)" }}>{total.toLocaleString()} products</span> · Search, filter and inquire in one tap.
             </p>
           </div>
 
           <div
-            className="relative flex items-center w-full md:w-96 h-11 rounded-lg px-3.5"
-            style={{ background: "var(--bg-elev)", border: "1px solid var(--line-strong)" }}
+            className="relative flex items-center w-full lg:w-[440px] h-14 px-4 border-b-2"
+            style={{ background: "var(--bg-elev)", borderColor: "var(--ink)" }}
           >
             <Search className="h-4 w-4 mr-2.5" style={{ color: "var(--ink-soft)" }} />
             <input
               id="catalogue-search"
-              type="text"
+              type="search"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search parts…"
-              className="flex-1 bg-transparent text-sm outline-none"
+              placeholder="Search part, brand or model"
+              className="min-w-0 flex-1 bg-transparent text-sm outline-none"
               style={{ color: "var(--ink)" }}
             />
             {search && (
@@ -155,11 +161,11 @@ export default function Catalogue() {
         </div>
 
         {brands.length > 0 && (
-          <div id="brands" className="mb-4">
-            <div className="text-xs font-semibold mb-2" style={{ color: "var(--ink-2)" }}>
+          <div id="brands" className="mb-7">
+            <div className="text-[10px] font-bold uppercase tracking-[.16em] mb-3" style={{ color: "var(--ink-faint)" }}>
               Brands
             </div>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex gap-2 overflow-x-auto pb-2">
               <FilterPill active={brand === null} onClick={() => setBrand(null)}>
                 All
               </FilterPill>
@@ -172,10 +178,10 @@ export default function Catalogue() {
           </div>
         )}
 
-        <div id="categories" className="mb-5">
+        <div id="categories" className="mb-7">
           <button
             onClick={() => setShowFilters((v) => !v)}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold mb-2"
+            className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[.16em] mb-3"
             style={{ color: "var(--ink-2)" }}
           >
             <SlidersHorizontal className="h-3.5 w-3.5" />
@@ -184,7 +190,7 @@ export default function Catalogue() {
           </button>
           <div
             className="overflow-hidden transition-[max-height] duration-300"
-            style={{ maxHeight: showFilters ? "1000px" : "84px" }}
+            style={{ maxHeight: showFilters ? "1000px" : "76px" }}
           >
             <div className="flex flex-wrap gap-2">
               <FilterPill active={categoryId === null} onClick={() => setCategoryId(null)}>
@@ -239,7 +245,7 @@ export default function Catalogue() {
           <EmptyState />
         ) : (
           <>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-3 gap-y-7 md:gap-x-5 md:gap-y-10">
               {products.map((p) => (
                 <ProductCard key={p.id} product={p} />
               ))}
@@ -250,7 +256,7 @@ export default function Catalogue() {
                 <button
                   onClick={loadMore}
                   disabled={appending}
-                  className="inline-flex items-center gap-2 px-6 h-11 rounded-lg text-sm font-semibold transition-opacity hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="inline-flex items-center gap-2 px-7 h-12 rounded-lg text-xs font-bold uppercase tracking-[.1em] transition-transform hover:-translate-y-0.5 disabled:opacity-60 disabled:cursor-not-allowed"
                   style={{
                     background: "var(--ink)",
                     color: "var(--bg)",
@@ -279,7 +285,7 @@ function FilterPill({
   return (
     <button
       onClick={onClick}
-      className="px-3.5 h-8 rounded-full text-xs font-medium transition-colors"
+      className="shrink-0 px-3.5 h-9 rounded-full text-xs font-semibold transition-colors hover:border-[var(--ink)]"
       style={{
         background: active ? "var(--ink)" : "var(--bg-elev)",
         color: active ? "var(--bg)" : "var(--ink-2)",
@@ -293,14 +299,14 @@ function FilterPill({
 
 function SkeletonGrid() {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
-      {Array.from({ length: 10 }).map((_, i) => (
+    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-3 gap-y-7 md:gap-x-5 md:gap-y-10">
+      {Array.from({ length: 8 }).map((_, i) => (
         <div
           key={i}
-          className="rounded-xl overflow-hidden"
+          className="rounded-lg overflow-hidden"
           style={{ background: "var(--bg-elev)", border: "1px solid var(--line)" }}
         >
-          <div className="aspect-square shimmer" />
+          <div className="aspect-[4/3] shimmer" />
           <div className="p-3 space-y-2">
             <div className="h-4 rounded shimmer" />
             <div className="h-3 w-2/3 rounded shimmer" />
@@ -315,11 +321,11 @@ function SkeletonGrid() {
 function EmptyState() {
   return (
     <div
-      className="text-center py-16 rounded-xl"
+      className="text-center py-20 rounded-xl"
       style={{ background: "var(--bg-elev)", border: "1px dashed var(--line-strong)" }}
     >
       <Package className="h-9 w-9 mx-auto mb-3" style={{ color: "var(--ink-faint)" }} />
-      <h3 className="text-lg font-semibold" style={{ color: "var(--ink)" }}>
+      <h3 className="font-editorial text-3xl font-semibold" style={{ color: "var(--ink)" }}>
         No parts match your filters
       </h3>
       <p className="mt-1.5 text-sm" style={{ color: "var(--ink-soft)" }}>

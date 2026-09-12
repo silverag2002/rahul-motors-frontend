@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Cormorant_Garamond, Manrope } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 
-const geist = Geist({
+const manrope = Manrope({
   subsets: ["latin"],
-  variable: "--font-geist-sans",
+  variable: "--font-manrope",
+  display: "swap",
+});
+
+const editorial = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["600", "700"],
+  variable: "--font-editorial",
   display: "swap",
 });
 
@@ -26,7 +33,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           }}
         />
       </head>
-      <body className={`${geist.variable} antialiased`}>
+      <body className={`${manrope.variable} ${editorial.variable} antialiased`}>
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
