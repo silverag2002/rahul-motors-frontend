@@ -21,9 +21,9 @@ export default function Hero() {
     <section className="pt-[72px] pb-0">
       <div className="shell">
         <div className="hero-surface">
-          <div className="grid grid-cols-2 md:grid-cols-3 border-y border-[var(--ink)] text-[9px] md:text-[10px] font-semibold uppercase tracking-[.18em]">
+          <div className="grid grid-cols-2 md:grid-cols-3 border-y border-[var(--rule)] text-[9px] md:text-[10px] font-semibold uppercase tracking-[.18em]">
             <span className="px-4 md:px-6 py-3">RM / Parts desk</span>
-            <span className="hidden md:block px-6 py-3 text-center border-x border-[var(--ink)]">Kolkata · India</span>
+            <span className="hidden md:block px-6 py-3 text-center border-x border-[var(--rule)]">Kolkata · India</span>
             <span className="px-4 md:px-6 py-3 text-right text-[var(--accent)]">Counter open</span>
           </div>
 
@@ -36,7 +36,7 @@ export default function Hero() {
                 <span className="block text-[var(--accent)]">Delivered fast.</span>
               </h1>
 
-              <div className="hero-reveal hero-reveal-2 relative mt-10 md:mt-14 grid sm:grid-cols-[1fr_auto] gap-7 items-end max-w-3xl border-t border-[var(--ink)] pt-6">
+              <div className="hero-reveal hero-reveal-2 relative mt-10 md:mt-14 grid sm:grid-cols-[1fr_auto] gap-7 items-end max-w-3xl border-t border-[var(--rule)] pt-6">
                 <p className="max-w-[54ch] text-sm md:text-base leading-7 text-[var(--ink-soft)]">
                   Sensors, switches, pumps, filters and the hard-to-find components that keep India moving—matched by people who know the part.
                 </p>
@@ -46,8 +46,8 @@ export default function Hero() {
               </div>
             </div>
 
-            <div className="relative lg:col-span-5 flex flex-col bg-[var(--accent)] border-t lg:border-t-0 lg:border-l border-[var(--ink)] text-[var(--ink)]">
-              <div className="inventory-stripes h-8 border-b border-[var(--ink)]" />
+            <div className="on-accent relative lg:col-span-5 flex flex-col border-t lg:border-t-0 lg:border-l border-[var(--rule)]">
+              <div className="inventory-stripes h-8 border-b border-[var(--rule)]" />
               <div className="relative px-5 sm:px-8 md:px-10 py-10 md:py-14 flex-1 overflow-hidden">
                 <div className="absolute -right-16 -top-14 h-64 w-64 rounded-full border border-[var(--ink)]/20" />
                 <div className="absolute right-4 top-5 opacity-20">
@@ -60,8 +60,8 @@ export default function Hero() {
                   <label htmlFor="hero-search" className="block px-3 pt-2 text-[9px] uppercase tracking-[.16em] text-white/50">Part / brand / vehicle</label>
                   <div className="flex items-center">
                     <Search className="ml-3 h-4 w-4 shrink-0 text-white/45" />
-                    <input id="hero-search" name="q" type="search" placeholder="ABS sensor, oil filter…" className="min-w-0 flex-1 h-12 px-3 bg-transparent text-base outline-none placeholder:text-white/40" />
-                    <button type="submit" aria-label="Find a part" className="h-11 w-11 grid place-items-center bg-white text-[var(--ink)] hover:bg-[var(--gold)] transition-colors">
+                    <input id="hero-search" name="q" type="search" autoComplete="off" spellCheck={false} placeholder="ABS sensor, oil filter…" className="search-input min-w-0 flex-1 h-12 px-3 bg-transparent text-base outline-none placeholder:text-white/40" />
+                    <button type="submit" aria-label="Find a part" className="h-11 w-11 grid place-items-center bg-[#f8f6ef] text-[#11120f] hover:bg-[var(--gold)] transition-colors">
                       <ArrowRight className="h-4 w-4" />
                     </button>
                   </div>
@@ -75,7 +75,7 @@ export default function Hero() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 bg-[var(--ink)] text-white">
+          <div className="inverse-surface grid grid-cols-2 lg:grid-cols-4">
             {trustPoints.map((item, index) => (
               <div key={item} className={`px-4 md:px-7 py-4 flex items-center gap-3 text-[9px] md:text-[10px] font-semibold uppercase tracking-[.14em] ${index % 2 ? "border-l" : ""} lg:border-l first:lg:border-l-0 border-white/15`}>
                 <span className="h-1.5 w-1.5 bg-[var(--accent)]" aria-hidden="true" />{item}

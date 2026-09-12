@@ -24,23 +24,23 @@ export default function Marquee() {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 border-t border-l" style={{ borderColor: "var(--ink)" }}>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 border-t border-l" style={{ borderColor: "var(--rule)" }}>
           {categories.map((category) => (
             <a
               key={category.id}
               href="#catalogue"
               onClick={() => window.dispatchEvent(new CustomEvent("rm:select-category", { detail: category.id }))}
-              className="group grid grid-cols-[58px_1fr_auto] min-h-20 items-center border-r border-b transition-colors hover:bg-[var(--accent)]"
-              style={{ borderColor: "var(--ink)" }}
+              className="group grid grid-cols-[58px_1fr_auto] min-h-20 items-center border-r border-b transition-colors hover:bg-[var(--accent-soft)]"
+              style={{ borderColor: "var(--rule)" }}
             >
-              <span className="self-stretch grid place-items-center border-r text-[9px] font-bold tabular-nums" style={{ color: "var(--ink-faint)", borderColor: "var(--ink)" }}>C-{String(category.id).padStart(3, "0")}</span>
+              <span className="self-stretch grid place-items-center border-r text-[9px] font-bold tabular-nums" style={{ color: "var(--ink-faint)", borderColor: "var(--rule)" }}>C-{String(category.id).padStart(3, "0")}</span>
               <span className="px-4 text-xs md:text-sm font-bold uppercase tracking-[.045em] line-clamp-2" style={{ color: "var(--ink)" }}>{category.name}</span>
               <ArrowUpRight className="mr-4 h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" style={{ color: "var(--ink)" }} />
             </a>
           ))}
         </div>
 
-        <a href="#categories" className="mt-5 ml-auto flex w-fit items-center gap-2 text-[10px] font-bold uppercase tracking-[.14em] border-b border-[var(--ink)] pb-1 hover:text-[var(--accent)]">View full directory <ArrowUpRight className="h-4 w-4" /></a>
+        <a href="#categories" className="mt-5 ml-auto flex w-fit items-center gap-2 text-[10px] font-bold uppercase tracking-[.14em] border-b border-[var(--rule)] pb-1 hover:text-[var(--accent)]">View full directory <ArrowUpRight className="h-4 w-4" /></a>
       </div>
     </section>
   );

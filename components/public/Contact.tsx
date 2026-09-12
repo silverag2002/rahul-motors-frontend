@@ -67,10 +67,10 @@ export default function Contact() {
           </div>
 
           <div className="lg:col-span-7">
-            <form onSubmit={(e) => { e.preventDefault(); submitInquiry(); }} className="contact-form p-5 sm:p-7 md:p-10 border border-[var(--ink)]" style={{ background: "var(--accent)" }} noValidate>
+            <form onSubmit={(e) => { e.preventDefault(); submitInquiry(); }} className="contact-form p-5 sm:p-7 md:p-10 border border-[#11120f]" style={{ background: "var(--accent)" }} noValidate>
               <div className="flex items-baseline justify-between gap-4 mb-7">
                 <h3 className="font-editorial text-3xl md:text-4xl" style={{ color: "var(--ink)" }}>Quick inquiry</h3>
-                <span className="text-[9px] uppercase tracking-[.15em]" style={{ color: "var(--ink-faint)" }}>No account needed</span>
+                <span className="text-[10px] font-semibold uppercase tracking-[.15em]" style={{ color: "var(--ink-soft)" }}>No account needed</span>
               </div>
 
               <div className="grid sm:grid-cols-2 gap-x-6 gap-y-5">
@@ -82,11 +82,11 @@ export default function Contact() {
               </div>
 
               <div className="mt-8 grid sm:grid-cols-2 gap-3">
-                <button type="submit" disabled={status.kind === "sending"} className="h-12 inline-flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-[.1em] bg-[var(--ink)] text-[var(--bg-elev)] hover:bg-white transition-colors disabled:opacity-60">
+                <button type="submit" disabled={status.kind === "sending"} className="h-12 inline-flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-[.1em] bg-[#11120f] text-[#f8f6ef] hover:bg-[#2b2d28] transition-colors disabled:opacity-60">
                   <Send className="h-4 w-4" /> {status.kind === "sending" ? "Sending…" : "Send inquiry"}
                 </button>
-                <button type="button" onClick={openWhatsApp} className="h-12 inline-flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-[.1em] border hover:bg-[var(--bg-muted)] transition-colors" style={{ color: "var(--ink)", borderColor: "var(--ink)" }}>
-                  <MessageCircle className="h-4 w-4 text-[var(--success)]" /> WhatsApp instead
+                <button type="button" onClick={openWhatsApp} className="h-12 inline-flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-[.1em] border hover:bg-[#11120f]/10 transition-colors" style={{ color: "var(--ink)", borderColor: "var(--ink)" }}>
+                  <MessageCircle className="h-4 w-4" /> WhatsApp instead
                 </button>
               </div>
 
@@ -108,11 +108,11 @@ export default function Contact() {
 }
 
 function Field({ label, value, onChange, placeholder, type = "text", autoComplete }: { label: string; value: string; onChange: (value: string) => void; placeholder: string; type?: string; autoComplete?: string }) {
-  return <label className="block"><span className="block text-[10px] font-bold uppercase tracking-[.12em]" style={{ color: "var(--ink-soft)" }}>{label}</span><input type={type} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} autoComplete={autoComplete} className="field-control h-12 text-base md:text-sm outline-none" /></label>;
+  return <label className="block"><span className="block pt-0.5 text-[11px] leading-4 font-bold uppercase tracking-[.12em]" style={{ color: "var(--ink-2)" }}>{label}</span><input type={type} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} autoComplete={autoComplete} className="field-control mt-1 h-11 text-base md:text-sm outline-none" /></label>;
 }
 
 function FieldArea({ label, value, onChange, placeholder, className = "" }: { label: string; value: string; onChange: (value: string) => void; placeholder: string; className?: string }) {
-  return <label className={`block ${className}`}><span className="block text-[10px] font-bold uppercase tracking-[.12em]" style={{ color: "var(--ink-soft)" }}>{label}</span><textarea value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} rows={3} className="field-control mt-1 py-3 text-base md:text-sm outline-none resize-none" /></label>;
+  return <label className={`block ${className}`}><span className="block pt-0.5 text-[11px] leading-4 font-bold uppercase tracking-[.12em]" style={{ color: "var(--ink-2)" }}>{label}</span><textarea value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} rows={3} className="field-control mt-1 py-3 text-base md:text-sm outline-none resize-none" /></label>;
 }
 
 function StatusMessage({ icon: Icon, message, kind }: { icon: typeof CheckCircle2; message: string; kind: "ok" | "error" }) {

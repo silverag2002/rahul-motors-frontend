@@ -50,7 +50,7 @@ export default function Navbar() {
     >
       <div className="shell h-[72px] flex items-center gap-5 border-x" style={{ borderColor: "var(--line)" }}>
         <Link href="/" className="flex items-center gap-3 shrink-0" aria-label="Rahul Motors home">
-          <span className="h-[72px] w-[58px] grid place-items-center overflow-hidden border-r" style={{ background: "var(--ink)", borderColor: "var(--line)" }}>
+          <span className="h-[72px] w-[58px] grid place-items-center overflow-hidden border-r" style={{ background: "var(--inverse-bg)", borderColor: "var(--line)" }}>
             <Image src="/logo.webp" alt="" width={29} height={28} priority sizes="29px" />
           </span>
           <span className="leading-none">
@@ -75,8 +75,8 @@ export default function Navbar() {
             href={whatsappLink(buildInquiryMessage({ name: "General inquiry" }))}
             target="_blank"
             rel="noopener"
-            className="hidden sm:inline-flex h-10 items-center gap-2 px-4 text-[10px] font-bold uppercase tracking-[.12em] transition-colors hover:bg-[var(--ink)]"
-            style={{ background: "var(--accent)", color: "#fff" }}
+            className="hidden sm:inline-flex h-10 items-center gap-2 px-4 text-[10px] font-bold uppercase tracking-[.12em] transition-colors hover:bg-[#11120f] hover:text-[#f8f6ef]"
+            style={{ background: "var(--accent)", color: "#11120f" }}
           >
             Inquire <ArrowUpRight className="h-3.5 w-3.5" />
           </a>

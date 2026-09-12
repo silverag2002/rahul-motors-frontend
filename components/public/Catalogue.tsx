@@ -144,7 +144,7 @@ export default function Catalogue() {
   );
 
   return (
-    <section id="catalogue" className="py-14 md:py-24 border-y-2" style={{ background: "var(--bg-subtle)", borderColor: "var(--ink)" }}>
+    <section id="catalogue" className="py-14 md:py-24 border-y-2" style={{ background: "var(--bg-subtle)", borderColor: "var(--rule)" }}>
       <div className="shell">
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-7 mb-9 md:mb-12">
           <div>
@@ -157,8 +157,8 @@ export default function Catalogue() {
           </div>
 
           <div
-            className="relative flex items-center w-full lg:w-[440px] h-14 px-4 border-2"
-            style={{ background: "var(--bg-elev)", borderColor: "var(--ink)" }}
+            className="search-box relative flex items-center w-full lg:w-[440px] h-14 px-4 border-2"
+            style={{ background: "var(--bg-elev)", borderColor: "var(--rule)" }}
           >
             <Search className="h-4 w-4 mr-2.5" style={{ color: "var(--ink-soft)" }} />
             <input
@@ -167,7 +167,9 @@ export default function Catalogue() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search part, brand or model"
-              className="min-w-0 flex-1 bg-transparent text-sm outline-none"
+              autoComplete="off"
+              spellCheck={false}
+              className="search-input min-w-0 flex-1 h-full bg-transparent text-sm outline-none"
               style={{ color: "var(--ink)" }}
             />
             {search && (
@@ -199,7 +201,7 @@ export default function Catalogue() {
         <div id="categories" className="mb-7">
           <button
             onClick={() => setShowFilters((v) => !v)}
-            className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[.16em] mb-3 border-b border-[var(--ink)] pb-2"
+            className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[.16em] mb-3 border-b border-[var(--rule)] pb-2"
             style={{ color: "var(--ink-2)" }}
           >
             <SlidersHorizontal className="h-3.5 w-3.5" />
