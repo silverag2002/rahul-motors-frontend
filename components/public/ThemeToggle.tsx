@@ -9,7 +9,7 @@ export default function ThemeToggle() {
     <button
       onClick={toggle}
       aria-label="Toggle theme"
-      className="group relative h-10 w-10 rounded-full border flex items-center justify-center transition-colors hover:bg-[var(--bg-muted)]"
+      className="group relative h-10 w-10 border flex items-center justify-center transition-colors hover:bg-[var(--bg-muted)]"
       style={{ borderColor: "var(--line-strong)" }}
     >
       <Sun

@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Manrope } from "next/font/google";
+import { Saira, Saira_Condensed } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 
-const manrope = Manrope({
+const saira = Saira({
   subsets: ["latin"],
-  variable: "--font-manrope",
+  variable: "--font-saira",
   display: "swap",
 });
 
-const editorial = Cormorant_Garamond({
+const condensed = Saira_Condensed({
   subsets: ["latin"],
-  weight: ["600", "700"],
-  variable: "--font-editorial",
+  weight: ["600", "700", "800"],
+  variable: "--font-condensed",
   display: "swap",
 });
 
@@ -33,7 +33,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           }}
         />
       </head>
-      <body className={`${manrope.variable} ${editorial.variable} antialiased`}>
+      <body suppressHydrationWarning className={`${saira.variable} ${condensed.variable} antialiased`}>
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>

@@ -43,47 +43,46 @@ export default function Navbar() {
     <header
       className="fixed top-0 inset-x-0 z-50 transition-[background-color,border-color,box-shadow] duration-300"
       style={{
-        backgroundColor: scrolled || open ? "color-mix(in oklab, var(--bg-elev) 94%, transparent)" : "var(--bg)",
+        backgroundColor: scrolled || open ? "var(--bg-elev)" : "var(--bg)",
         borderBottom: `1px solid ${scrolled || open ? "var(--line)" : "transparent"}`,
         boxShadow: scrolled ? "var(--shadow-sm)" : "none",
-        backdropFilter: scrolled || open ? "blur(14px)" : "none",
       }}
     >
-      <div className="shell h-[72px] flex items-center gap-5">
+      <div className="shell h-[72px] flex items-center gap-5 border-x" style={{ borderColor: "var(--line)" }}>
         <Link href="/" className="flex items-center gap-3 shrink-0" aria-label="Rahul Motors home">
-          <span className="h-10 w-10 rounded-full grid place-items-center overflow-hidden border" style={{ background: "var(--bg-elev)", borderColor: "var(--line)" }}>
+          <span className="h-[72px] w-[58px] grid place-items-center overflow-hidden border-r" style={{ background: "var(--ink)", borderColor: "var(--line)" }}>
             <Image src="/logo.webp" alt="" width={29} height={28} priority sizes="29px" />
           </span>
           <span className="leading-none">
-            <span className="font-editorial block text-xl font-bold tracking-[-.02em]" style={{ color: "var(--ink)" }}>Rahul Motors</span>
-            <span className="mt-1 block text-[8px] uppercase tracking-[.22em]" style={{ color: "var(--ink-faint)" }}>Genuine automotive parts</span>
+            <span className="font-editorial block text-2xl tracking-[.02em]" style={{ color: "var(--ink)" }}>Rahul Motors</span>
+            <span className="mt-1 block text-[8px] font-semibold uppercase tracking-[.2em]" style={{ color: "var(--accent)" }}>Genuine automotive parts</span>
           </span>
         </Link>
 
         <nav className="hidden xl:flex items-center gap-0 ml-auto" aria-label="Primary navigation">
           {links.map((link) => (
-            <a key={link.href} href={link.href} className="px-3.5 py-2 text-xs font-semibold transition-colors hover:text-[var(--accent)]" style={{ color: "var(--ink-2)" }}>
+            <a key={link.href} href={link.href} className="px-3.5 py-2 text-[10px] font-bold uppercase tracking-[.1em] transition-colors hover:text-[var(--accent)]" style={{ color: "var(--ink-2)" }}>
               {link.label}
             </a>
           ))}
         </nav>
 
         <div className="ml-auto xl:ml-3 flex items-center gap-2">
-          <button onClick={openSearch} className="hidden md:inline-flex h-10 items-center gap-2 px-3 text-xs font-semibold border-b transition-colors hover:text-[var(--accent)]" style={{ color: "var(--ink-2)", borderColor: "var(--line-strong)" }} aria-label="Jump to product search">
-            <Search className="h-4 w-4" /> Search parts
+          <button onClick={openSearch} className="hidden md:inline-flex h-10 items-center gap-2 px-3 text-[10px] font-bold uppercase tracking-[.1em] border-b transition-colors hover:text-[var(--accent)]" style={{ color: "var(--ink-2)", borderColor: "var(--line-strong)" }} aria-label="Jump to product search">
+            <Search className="h-4 w-4" /> Part lookup
           </button>
           <a
             href={whatsappLink(buildInquiryMessage({ name: "General inquiry" }))}
             target="_blank"
             rel="noopener"
-            className="hidden sm:inline-flex h-10 items-center gap-2 px-4 rounded-lg text-xs font-bold uppercase tracking-[.08em] transition-colors hover:bg-[var(--ink)]"
+            className="hidden sm:inline-flex h-10 items-center gap-2 px-4 text-[10px] font-bold uppercase tracking-[.12em] transition-colors hover:bg-[var(--ink)]"
             style={{ background: "var(--accent)", color: "#fff" }}
           >
             Inquire <ArrowUpRight className="h-3.5 w-3.5" />
           </a>
           <ThemeToggle />
           <button
-            className="xl:hidden h-10 w-10 rounded-full flex items-center justify-center border"
+            className="xl:hidden h-10 w-10 flex items-center justify-center border"
             style={{ borderColor: "var(--line-strong)", color: "var(--ink)" }}
             onClick={() => setOpen((value) => !value)}
             aria-expanded={open}
@@ -104,8 +103,8 @@ export default function Navbar() {
               </a>
             ))}
             <div className="grid grid-cols-2 gap-2 mt-4">
-              <a href={telLink(CONTACT.phones[0].tel)} className="h-11 rounded-lg inline-flex items-center justify-center gap-2 text-xs font-bold border" style={{ borderColor: "var(--line-strong)", color: "var(--ink)" }}><Phone className="h-4 w-4" /> Call us</a>
-              <button onClick={() => { setOpen(false); openSearch(); }} className="h-11 rounded-lg inline-flex items-center justify-center gap-2 text-xs font-bold" style={{ background: "var(--ink)", color: "var(--bg)" }}><Search className="h-4 w-4" /> Find a part</button>
+              <a href={telLink(CONTACT.phones[0].tel)} className="h-11 inline-flex items-center justify-center gap-2 text-xs font-bold border" style={{ borderColor: "var(--line-strong)", color: "var(--ink)" }}><Phone className="h-4 w-4" /> Call us</a>
+              <button onClick={() => { setOpen(false); openSearch(); }} className="h-11 inline-flex items-center justify-center gap-2 text-xs font-bold" style={{ background: "var(--ink)", color: "var(--bg)" }}><Search className="h-4 w-4" /> Find a part</button>
             </div>
           </nav>
         </div>

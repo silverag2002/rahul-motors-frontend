@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { publicApi, PublicCategory } from "@/lib/publicApi";
 
 export default function Marquee() {
@@ -14,30 +14,33 @@ export default function Marquee() {
   if (categories.length === 0) return null;
 
   return (
-    <section className="py-12 md:py-20" id="featured-categories">
+    <section className="py-14 md:py-24" id="featured-categories">
       <div className="shell">
-        <div className="flex items-end justify-between gap-5 mb-7 md:mb-10">
-          <h2 className="font-editorial text-4xl md:text-6xl leading-none tracking-[-.03em]" style={{ color: "var(--ink)" }}>Find it by category.</h2>
-          <a href="#categories" className="hidden sm:inline-flex items-center gap-2 pb-1 text-xs font-bold uppercase tracking-[.12em] hover:text-[var(--accent)] transition-colors" style={{ color: "var(--ink-soft)" }}>View all <ArrowRight className="h-4 w-4" /></a>
+        <div className="grid md:grid-cols-12 gap-6 md:items-end mb-8 md:mb-12">
+          <h2 className="md:col-span-8 font-editorial text-6xl md:text-8xl leading-[.78] tracking-[-.025em]" style={{ color: "var(--ink)" }}>Parts,<br />sorted.</h2>
+          <div className="md:col-span-4 md:text-right">
+            <p className="text-[10px] font-bold uppercase tracking-[.16em]" style={{ color: "var(--accent)" }}>Live category directory</p>
+            <p className="mt-2 text-sm" style={{ color: "var(--ink-soft)" }}>Jump straight to the shelf you need.</p>
+          </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 border-t border-l" style={{ borderColor: "var(--line)" }}>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 border-t border-l" style={{ borderColor: "var(--ink)" }}>
           {categories.map((category) => (
             <a
               key={category.id}
               href="#catalogue"
               onClick={() => window.dispatchEvent(new CustomEvent("rm:select-category", { detail: category.id }))}
-              className="group min-h-24 md:min-h-28 p-4 md:p-5 flex flex-col justify-between border-r border-b transition-colors hover:bg-[var(--bg-elev)]"
-              style={{ borderColor: "var(--line)" }}
+              className="group grid grid-cols-[58px_1fr_auto] min-h-20 items-center border-r border-b transition-colors hover:bg-[var(--accent)]"
+              style={{ borderColor: "var(--ink)" }}
             >
-              <span className="text-[10px] uppercase tracking-[.16em]" style={{ color: "var(--ink-faint)" }}>Shop parts</span>
-              <span className="flex items-end justify-between gap-3 text-sm md:text-base font-semibold" style={{ color: "var(--ink)" }}>
-                <span className="line-clamp-2">{category.name}</span>
-                <ArrowRight className="h-4 w-4 shrink-0 text-[var(--accent)] transition-transform group-hover:translate-x-1" />
-              </span>
+              <span className="self-stretch grid place-items-center border-r text-[9px] font-bold tabular-nums" style={{ color: "var(--ink-faint)", borderColor: "var(--ink)" }}>C-{String(category.id).padStart(3, "0")}</span>
+              <span className="px-4 text-xs md:text-sm font-bold uppercase tracking-[.045em] line-clamp-2" style={{ color: "var(--ink)" }}>{category.name}</span>
+              <ArrowUpRight className="mr-4 h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" style={{ color: "var(--ink)" }} />
             </a>
           ))}
         </div>
+
+        <a href="#categories" className="mt-5 ml-auto flex w-fit items-center gap-2 text-[10px] font-bold uppercase tracking-[.14em] border-b border-[var(--ink)] pb-1 hover:text-[var(--accent)]">View full directory <ArrowUpRight className="h-4 w-4" /></a>
       </div>
     </section>
   );

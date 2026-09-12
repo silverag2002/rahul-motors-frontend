@@ -7,6 +7,21 @@ import ProductCard from "@/components/public/ProductCard";
 
 const PAGE_SIZE = 24;
 
+function isDisplayableProduct(product: PublicProduct) {
+  return /[a-z0-9]/i.test(product.name?.trim() || "");
+}
+
+function uniqueBrands(products: PublicProduct[]) {
+  const seen = new Map<string, string>();
+  products.forEach((product) => {
+    const value = (product.brand || "").trim();
+    if (!/[a-z0-9]/i.test(value)) return;
+    const key = value.toLocaleLowerCase();
+    if (!seen.has(key)) seen.set(key, value.toLocaleUpperCase());
+  });
+  return Array.from(seen.values()).sort((a, b) => a.localeCompare(b));
+}
+
 export default function Catalogue() {
   const [categories, setCategories] = useState<PublicCategory[]>([]);
   const [brands, setBrands] = useState<string[]>([]);
@@ -16,6 +31,8 @@ export default function Catalogue() {
   const [pageCount, setPageCount] = useState(1);
   const [loading, setLoading] = useState(true);
   const [appending, setAppending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [retryNonce, setRetryNonce] = useState(0);
 
   const [search, setSearch] = useState("");
   const [debounced, setDebounced] = useState("");
@@ -55,6 +72,7 @@ export default function Catalogue() {
     let cancelled = false;
     async function load() {
       setLoading(true);
+      setError(null);
       try {
         const params: Parameters<typeof publicApi.listProducts>[0] = {
           page: 1,
@@ -66,7 +84,7 @@ export default function Catalogue() {
 
         const { data, meta } = await publicApi.listProducts(params);
         if (cancelled) return;
-        setProducts(data);
+        setProducts(data.filter(isDisplayableProduct));
         setTotal(meta?.total ?? data.length);
         setPageCount(meta?.pageCount ?? 1);
         setPage(1);
@@ -75,14 +93,14 @@ export default function Catalogue() {
           firstLoadRef.current = false;
           publicApi.listProducts({ pageSize: 100 }).then(({ data: wider }) => {
             if (cancelled) return;
-            const unique = Array.from(new Set(wider.map((p) => (p.brand || "").trim()).filter(Boolean))).sort();
-            setBrands(unique);
+            setBrands(uniqueBrands(wider));
           }).catch(() => undefined);
         }
-      } catch {
+      } catch (err) {
         if (!cancelled) {
           setProducts([]);
           setTotal(0);
+          setError(err instanceof Error ? err.message : "We couldn’t load the catalogue.");
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -92,7 +110,7 @@ export default function Catalogue() {
     return () => {
       cancelled = true;
     };
-  }, [debounced, brand, categoryId]);
+  }, [debounced, brand, categoryId, retryNonce]);
 
   async function loadMore() {
     if (page >= pageCount || appending) return;
@@ -107,7 +125,7 @@ export default function Catalogue() {
       if (brand) params.brand = brand;
       if (categoryId) params.categoryId = categoryId;
       const { data } = await publicApi.listProducts(params);
-      setProducts((prev) => [...prev, ...data]);
+      setProducts((prev) => [...prev, ...data.filter(isDisplayableProduct)]);
       setPage(next);
     } finally {
       setAppending(false);
@@ -126,12 +144,12 @@ export default function Catalogue() {
   );
 
   return (
-    <section id="catalogue" className="py-14 md:py-24 border-y" style={{ background: "var(--bg-subtle)", borderColor: "var(--line)" }}>
+    <section id="catalogue" className="py-14 md:py-24 border-y-2" style={{ background: "var(--bg-subtle)", borderColor: "var(--ink)" }}>
       <div className="shell">
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-7 mb-9 md:mb-12">
           <div>
-            <h2 className="font-editorial text-5xl md:text-7xl leading-none tracking-[-.035em]" style={{ color: "var(--ink)" }}>
-              The parts counter.
+            <h2 className="font-editorial text-6xl md:text-8xl leading-[.78] tracking-[-.025em]" style={{ color: "var(--ink)" }}>
+              Find your fit.
             </h2>
             <p className="mt-4 text-sm md:text-base" style={{ color: "var(--ink-soft)" }}>
               <span className="font-semibold tabular-nums" style={{ color: "var(--ink)" }}>{total.toLocaleString()} products</span> · Search, filter and inquire in one tap.
@@ -139,7 +157,7 @@ export default function Catalogue() {
           </div>
 
           <div
-            className="relative flex items-center w-full lg:w-[440px] h-14 px-4 border-b-2"
+            className="relative flex items-center w-full lg:w-[440px] h-14 px-4 border-2"
             style={{ background: "var(--bg-elev)", borderColor: "var(--ink)" }}
           >
             <Search className="h-4 w-4 mr-2.5" style={{ color: "var(--ink-soft)" }} />
@@ -181,7 +199,7 @@ export default function Catalogue() {
         <div id="categories" className="mb-7">
           <button
             onClick={() => setShowFilters((v) => !v)}
-            className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[.16em] mb-3"
+            className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[.16em] mb-3 border-b border-[var(--ink)] pb-2"
             style={{ color: "var(--ink-2)" }}
           >
             <SlidersHorizontal className="h-3.5 w-3.5" />
@@ -214,7 +232,7 @@ export default function Catalogue() {
               <button
                 key={i}
                 onClick={f.clear}
-                className="inline-flex items-center gap-1.5 pl-2.5 pr-1.5 h-7 rounded-full text-xs font-medium"
+                  className="inline-flex items-center gap-1.5 pl-2.5 pr-1.5 h-7 text-xs font-medium"
                 style={{
                   background: "var(--accent-soft)",
                   color: "var(--accent)",
@@ -241,6 +259,8 @@ export default function Catalogue() {
 
         {loading ? (
           <SkeletonGrid />
+        ) : error ? (
+          <ErrorState message={error} onRetry={() => setRetryNonce((value) => value + 1)} />
         ) : products.length === 0 ? (
           <EmptyState />
         ) : (
@@ -256,7 +276,7 @@ export default function Catalogue() {
                 <button
                   onClick={loadMore}
                   disabled={appending}
-                  className="inline-flex items-center gap-2 px-7 h-12 rounded-lg text-xs font-bold uppercase tracking-[.1em] transition-transform hover:-translate-y-0.5 disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="inline-flex items-center gap-2 px-7 h-12 text-xs font-bold uppercase tracking-[.1em] transition-transform hover:-translate-y-0.5 disabled:opacity-60 disabled:cursor-not-allowed"
                   style={{
                     background: "var(--ink)",
                     color: "var(--bg)",
@@ -285,7 +305,7 @@ function FilterPill({
   return (
     <button
       onClick={onClick}
-      className="shrink-0 px-3.5 h-9 rounded-full text-xs font-semibold transition-colors hover:border-[var(--ink)]"
+      className="shrink-0 px-3.5 h-9 text-[10px] font-bold uppercase tracking-[.08em] transition-colors hover:border-[var(--ink)]"
       style={{
         background: active ? "var(--ink)" : "var(--bg-elev)",
         color: active ? "var(--bg)" : "var(--ink-2)",
@@ -303,7 +323,7 @@ function SkeletonGrid() {
       {Array.from({ length: 8 }).map((_, i) => (
         <div
           key={i}
-          className="rounded-lg overflow-hidden"
+          className="overflow-hidden"
           style={{ background: "var(--bg-elev)", border: "1px solid var(--line)" }}
         >
           <div className="aspect-[4/3] shimmer" />
@@ -321,7 +341,7 @@ function SkeletonGrid() {
 function EmptyState() {
   return (
     <div
-      className="text-center py-20 rounded-xl"
+      className="text-center py-20"
       style={{ background: "var(--bg-elev)", border: "1px dashed var(--line-strong)" }}
     >
       <Package className="h-9 w-9 mx-auto mb-3" style={{ color: "var(--ink-faint)" }} />
@@ -331,6 +351,17 @@ function EmptyState() {
       <p className="mt-1.5 text-sm" style={{ color: "var(--ink-soft)" }}>
         Try clearing filters or contact us — we may have it in stock.
       </p>
+    </div>
+  );
+}
+
+function ErrorState({ message, onRetry }: { message: string; onRetry: () => void }) {
+  return (
+    <div className="py-16 px-5 border-y" style={{ borderColor: "var(--line-strong)" }}>
+      <Package className="h-8 w-8 mb-4" style={{ color: "var(--accent)" }} />
+      <h3 className="font-editorial text-3xl font-semibold" style={{ color: "var(--ink)" }}>The parts counter is temporarily offline.</h3>
+      <p className="mt-2 max-w-xl text-sm leading-6" style={{ color: "var(--ink-soft)" }}>{message} You can retry now or contact us directly.</p>
+      <button onClick={onRetry} className="mt-6 h-11 px-5 text-xs font-bold uppercase tracking-[.1em]" style={{ background: "var(--ink)", color: "var(--bg)" }}>Try again</button>
     </div>
   );
 }

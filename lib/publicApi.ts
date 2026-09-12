@@ -1,5 +1,3 @@
-import { API_BASE_URL } from "@/lib/constants";
-
 export interface PublicImage {
   url: string;
   formats?: {
@@ -37,13 +35,24 @@ export interface PublicProductsMeta {
 let categoriesRequest: Promise<PublicCategory[]> | null = null;
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(`${API_BASE_URL.replace(/\/$/, "")}${path}`, init);
-  const payload = await response.json().catch(() => ({}));
-  if (!response.ok) {
-    const message = payload?.error?.message || `Request failed with status ${response.status}`;
-    throw new Error(message);
+  const controller = new AbortController();
+  const timeout = window.setTimeout(() => controller.abort(), 16_000);
+  try {
+    const response = await fetch(`/api${path}`, { ...init, signal: controller.signal });
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      const message = payload?.error?.message || `Request failed with status ${response.status}`;
+      throw new Error(message);
+    }
+    return payload;
+  } catch (error) {
+    if (error instanceof Error && error.name === "AbortError") {
+      throw new Error("The parts service took too long to respond.");
+    }
+    throw error;
+  } finally {
+    window.clearTimeout(timeout);
   }
-  return payload;
 }
 
 export const publicApi = {

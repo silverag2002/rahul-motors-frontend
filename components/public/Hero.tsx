@@ -4,102 +4,81 @@ import Image from "next/image";
 import { ArrowDown, ArrowRight, MessageCircle, Phone, Search } from "lucide-react";
 import { CONTACT, telLink, whatsappLink, buildInquiryMessage } from "@/lib/contact";
 
-const trustPoints = ["100% genuine", "Pan-India dispatch", "Expert part matching", "30+ years trusted"];
+const trustPoints = ["Genuine sourcing", "All-India dispatch", "Expert matching", "Serving since 1995"];
 
 export default function Hero() {
   function focusSearch(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const q = new FormData(e.currentTarget).get("q")?.toString().trim() ?? "";
+    const query = new FormData(e.currentTarget).get("q")?.toString().trim() ?? "";
     const search = document.querySelector("#catalogue-search") as HTMLInputElement | null;
     if (!search) return;
-    window.dispatchEvent(new CustomEvent("rm:set-search", { detail: q }));
+    window.dispatchEvent(new CustomEvent("rm:set-search", { detail: query }));
     search.scrollIntoView({ behavior: "smooth", block: "center" });
-    search.focus({ preventScroll: true });
+    window.setTimeout(() => search.focus({ preventScroll: true }), 450);
   }
 
   return (
-    <section className="pt-20 md:pt-24 pb-8 md:pb-12">
+    <section className="pt-[72px] pb-0">
       <div className="shell">
-        <div className="hero-surface rounded-[1.5rem] md:rounded-[2rem]">
-          <div className="flex items-center justify-between px-5 md:px-10 py-4 border-b border-white/10 text-[10px] md:text-xs uppercase tracking-[0.16em] text-white/60">
-            <span>Established 1995</span>
-            <span className="hidden sm:inline">Kolkata · Serving all India</span>
-            <span className="text-[#e2bf72]">Genuine parts only</span>
+        <div className="hero-surface">
+          <div className="grid grid-cols-2 md:grid-cols-3 border-y border-[var(--ink)] text-[9px] md:text-[10px] font-semibold uppercase tracking-[.18em]">
+            <span className="px-4 md:px-6 py-3">RM / Parts desk</span>
+            <span className="hidden md:block px-6 py-3 text-center border-x border-[var(--ink)]">Kolkata · India</span>
+            <span className="px-4 md:px-6 py-3 text-right text-[var(--accent)]">Counter open</span>
           </div>
 
-          <div className="grid lg:grid-cols-12 min-h-[560px] md:min-h-[620px]">
-            <div className="lg:col-span-8 px-5 py-12 sm:px-8 md:px-10 md:py-16 lg:py-20 flex flex-col justify-center">
-              <h1 className="hero-reveal font-editorial text-[3.65rem] sm:text-7xl md:text-[5.65rem] lg:text-[6.5rem] leading-[0.82] tracking-[-0.035em] max-w-[900px] text-balance">
-                Genuine auto parts,
-                <span className="block text-[#e2bf72] italic">delivered fast.</span>
+          <div className="grid lg:grid-cols-12">
+            <div className="relative lg:col-span-7 px-5 sm:px-8 md:px-12 py-14 md:py-20 lg:py-24 overflow-hidden">
+              <span aria-hidden="true" className="absolute -right-6 bottom-5 font-editorial text-[15rem] leading-none text-[var(--ink)] opacity-[.035]">RM</span>
+              <h1 className="hero-reveal relative font-editorial text-[4.4rem] sm:text-[5.4rem] md:text-8xl lg:text-8xl leading-[.74] tracking-[-.035em]">
+                Genuine
+                <span className="block">auto parts.</span>
+                <span className="block text-[var(--accent)]">Delivered fast.</span>
               </h1>
 
-              <div className="hero-reveal hero-reveal-2 mt-9 md:mt-12 grid md:grid-cols-[1fr_auto] gap-6 md:items-end max-w-4xl">
-                <p className="max-w-[55ch] text-sm md:text-base leading-7 text-white/65">
-                  Sensors, switches, pumps, filters and more—sourced direct from OEM channels and matched by people who know the part.
+              <div className="hero-reveal hero-reveal-2 relative mt-10 md:mt-14 grid sm:grid-cols-[1fr_auto] gap-7 items-end max-w-3xl border-t border-[var(--ink)] pt-6">
+                <p className="max-w-[54ch] text-sm md:text-base leading-7 text-[var(--ink-soft)]">
+                  Sensors, switches, pumps, filters and the hard-to-find components that keep India moving—matched by people who know the part.
                 </p>
-                <a href="#catalogue" className="group inline-flex items-center gap-2 text-sm font-semibold text-[#e2bf72] underline underline-offset-8 decoration-white/20 hover:decoration-[#e2bf72] transition-colors">
-                  Browse catalogue
-                  <ArrowDown className="h-4 w-4 transition-transform group-hover:translate-y-1" />
-                </a>
-              </div>
-
-              <form onSubmit={focusSearch} className="hero-reveal hero-reveal-3 hero-search mt-8 md:mt-10 flex items-center p-1.5 max-w-3xl rounded-xl text-[#171816]">
-                <Search className="ml-3 h-4 w-4 shrink-0 text-[#77786f]" />
-                <input
-                  name="q"
-                  type="search"
-                  aria-label="Search parts, brands, and models"
-                  placeholder="Search ABS sensor, brake pads, oil filter…"
-                  className="min-w-0 flex-1 h-12 px-3 bg-transparent text-sm outline-none placeholder:text-[#77786f]"
-                />
-                <button type="submit" aria-label="Find a part" className="h-12 px-4 md:px-6 rounded-lg bg-[#d96522] text-white text-sm font-semibold inline-flex items-center gap-2 hover:bg-[#bf541c] transition-colors">
-                  <span className="hidden sm:inline">Find a part</span>
-                  <ArrowRight className="h-4 w-4" />
-                </button>
-              </form>
-
-              <div className="hero-reveal hero-reveal-3 mt-5 flex flex-wrap items-center gap-x-5 gap-y-3 text-xs md:text-sm text-white/60">
-                <span>Need help matching a part?</span>
-                <a
-                  href={whatsappLink(buildInquiryMessage({ name: "General inquiry" }))}
-                  target="_blank"
-                  rel="noopener"
-                  className="inline-flex items-center gap-2 font-semibold text-[#68dc95] hover:text-[#8de9ae] transition-colors"
-                >
-                  <MessageCircle className="h-4 w-4" /> WhatsApp
-                </a>
-                <a href={telLink(CONTACT.phones[0].tel)} className="inline-flex items-center gap-2 font-semibold text-white hover:text-[#e2bf72] transition-colors">
-                  <Phone className="h-4 w-4" /> {CONTACT.phones[0].number}
+                <a href="#catalogue" className="group inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[.12em]">
+                  Open catalogue <ArrowDown className="h-4 w-4 text-[var(--accent)] transition-transform group-hover:translate-y-1" />
                 </a>
               </div>
             </div>
 
-            <div className="hidden lg:flex lg:col-span-4 relative items-center justify-center border-l border-white/10">
-              <div className="absolute h-[310px] w-[310px] rounded-full border border-[#d7b466]/30" />
-              <div className="absolute h-[238px] w-[238px] rounded-full border border-white/10" />
-              <div className="relative h-48 w-48 rounded-full bg-[#f7f2e8] flex items-center justify-center shadow-[0_30px_60px_-24px_rgba(0,0,0,.8)]">
-                <Image
-                  src="/logo.webp"
-                  alt="Rahul Motors emblem"
-                  width={142}
-                  height={139}
-                  className="hero-mark"
-                  priority
-                  sizes="142px"
-                />
-              </div>
-              <div className="absolute bottom-10 left-8 right-8 flex justify-between text-[10px] uppercase tracking-[.16em] text-white/45">
-                <span>RM / 1995</span>
-                <span>OEM supply</span>
+            <div className="relative lg:col-span-5 flex flex-col bg-[var(--accent)] border-t lg:border-t-0 lg:border-l border-[var(--ink)] text-[var(--ink)]">
+              <div className="inventory-stripes h-8 border-b border-[var(--ink)]" />
+              <div className="relative px-5 sm:px-8 md:px-10 py-10 md:py-14 flex-1 overflow-hidden">
+                <div className="absolute -right-16 -top-14 h-64 w-64 rounded-full border border-[var(--ink)]/20" />
+                <div className="absolute right-4 top-5 opacity-20">
+                  <Image src="/logo.webp" alt="" width={170} height={166} className="hero-mark" priority sizes="170px" />
+                </div>
+                <h2 className="relative font-editorial text-5xl md:text-6xl leading-[.85] max-w-xs">Name the part. We’ll match it.</h2>
+                <p className="relative mt-5 max-w-sm text-sm leading-6 text-[var(--ink)]/70">Search the live inventory or send the vehicle model on WhatsApp.</p>
+
+                <form onSubmit={focusSearch} className="hero-reveal hero-reveal-3 hero-search relative mt-9 p-2">
+                  <label htmlFor="hero-search" className="block px-3 pt-2 text-[9px] uppercase tracking-[.16em] text-white/50">Part / brand / vehicle</label>
+                  <div className="flex items-center">
+                    <Search className="ml-3 h-4 w-4 shrink-0 text-white/45" />
+                    <input id="hero-search" name="q" type="search" placeholder="ABS sensor, oil filter…" className="min-w-0 flex-1 h-12 px-3 bg-transparent text-base outline-none placeholder:text-white/40" />
+                    <button type="submit" aria-label="Find a part" className="h-11 w-11 grid place-items-center bg-white text-[var(--ink)] hover:bg-[var(--gold)] transition-colors">
+                      <ArrowRight className="h-4 w-4" />
+                    </button>
+                  </div>
+                </form>
+
+                <div className="relative mt-8 grid grid-cols-2 border-t border-[var(--ink)]/35 text-xs font-semibold">
+                  <a href={whatsappLink(buildInquiryMessage({ name: "General inquiry" }))} target="_blank" rel="noopener" className="py-4 pr-3 inline-flex items-center gap-2 hover:bg-black/5"><MessageCircle className="h-4 w-4" /> WhatsApp</a>
+                  <a href={telLink(CONTACT.phones[0].tel)} className="py-4 pl-3 border-l border-[var(--ink)]/35 inline-flex items-center gap-2 hover:bg-black/5"><Phone className="h-4 w-4" /> Call counter</a>
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 border-t border-white/10">
+          <div className="grid grid-cols-2 lg:grid-cols-4 bg-[var(--ink)] text-white">
             {trustPoints.map((item, index) => (
-              <div key={item} className={`px-5 md:px-8 py-4 text-[10px] sm:text-xs uppercase tracking-[.12em] text-white/70 ${index % 2 ? "border-l" : ""} lg:border-l first:lg:border-l-0 border-white/10`}>
-                <span className="mr-2 inline-block h-1.5 w-1.5 rotate-45 bg-[#e2bf72]" aria-hidden="true" />{item}
+              <div key={item} className={`px-4 md:px-7 py-4 flex items-center gap-3 text-[9px] md:text-[10px] font-semibold uppercase tracking-[.14em] ${index % 2 ? "border-l" : ""} lg:border-l first:lg:border-l-0 border-white/15`}>
+                <span className="h-1.5 w-1.5 bg-[var(--accent)]" aria-hidden="true" />{item}
               </div>
             ))}
           </div>

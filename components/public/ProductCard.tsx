@@ -12,8 +12,8 @@ export default function ProductCard({ product }: { product: PublicProduct }) {
   const msg = buildInquiryMessage({ name: product.name, brand: product.brand, partNo: product.part_no, carName: product.car_name });
 
   return (
-    <article className="product-card group flex flex-col min-w-0">
-      <div className="relative aspect-[4/3] overflow-hidden rounded-lg border" style={{ background: "var(--bg-muted)", borderColor: "var(--line)" }}>
+    <article className="product-card group flex flex-col min-w-0 border-t-2 pt-2" style={{ borderColor: "var(--ink)" }}>
+      <div className="relative aspect-[4/3] overflow-hidden border" style={{ background: "var(--bg-muted)", borderColor: "var(--line)" }}>
         {img ? (
           <>
             {!imgLoaded && <div className="absolute inset-0 shimmer" />}
@@ -35,14 +35,14 @@ export default function ProductCard({ product }: { product: PublicProduct }) {
           </div>
         )}
         {product.brand && (
-          <span className="absolute top-2 left-2 max-w-[calc(100%-1rem)] truncate rounded-md px-2.5 py-1 text-[9px] font-bold uppercase tracking-[.12em] shadow-sm" style={{ background: "var(--bg-elev)", color: "var(--ink)" }}>
+          <span className="absolute top-0 left-0 max-w-[calc(100%-1rem)] truncate px-2.5 py-1.5 text-[9px] font-bold uppercase tracking-[.12em]" style={{ background: "var(--ink)", color: "var(--bg)" }}>
             {product.brand}
           </span>
         )}
       </div>
 
       <div className="pt-4 flex flex-1 flex-col border-t mt-3" style={{ borderColor: "var(--line)" }}>
-        <h3 className="text-sm md:text-base font-semibold leading-snug line-clamp-2 min-h-[2.55rem] md:min-h-[2.8rem]" style={{ color: "var(--ink)" }} title={product.name}>
+        <h3 className="text-sm md:text-base font-bold uppercase tracking-[.02em] leading-snug line-clamp-2 min-h-[2.55rem] md:min-h-[2.8rem]" style={{ color: "var(--ink)" }} title={product.name}>
           {product.name}
         </h3>
         <div className="mt-2 min-h-9 text-[10px] md:text-xs leading-5" style={{ color: "var(--ink-soft)" }}>
@@ -63,7 +63,7 @@ export default function ProductCard({ product }: { product: PublicProduct }) {
             <span className="truncate">Ask for price</span>
             <ArrowUpRight className="product-arrow hidden sm:block h-3.5 w-3.5 shrink-0 transition-transform" />
           </a>
-          <a href={telLink(CONTACT.phones[0].tel)} aria-label={`Call about ${product.name}`} className="h-8 w-8 shrink-0 rounded-full grid place-items-center border hover:bg-[var(--ink)] hover:text-[var(--bg)] transition-colors" style={{ borderColor: "var(--line-strong)", color: "var(--ink-2)" }}>
+          <a href={telLink(CONTACT.phones[0].tel)} aria-label={`Call about ${product.name}`} className="h-8 w-8 shrink-0 grid place-items-center border hover:bg-[var(--ink)] hover:text-[var(--bg)] transition-colors" style={{ borderColor: "var(--line-strong)", color: "var(--ink-2)" }}>
             <Phone className="h-3.5 w-3.5" />
           </a>
         </div>
