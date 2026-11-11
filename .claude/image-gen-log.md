@@ -58,3 +58,10 @@ Real shop photos (not generated): public/img/shop/{front,sign,counter}.webp, tak
 |----|------|----------|--------|------|
 | hero-parts | home hero + right half of og.jpg | 1/5 (2 options made: flat-lay on dark mat, and a shop counter scene; flat-lay chosen) | done (viewer capture) | public/img/hero-parts.webp |
 New file name so cached copies of the old hero.webp are not served.
+
+# Image gen 2026-11-11 (round 5: customer said "too much black", asked for other photos)
+| id | slot | attempts | status | file |
+|----|------|----------|--------|------|
+| hero-light | home hero: same flat-lay idea on a very light grey mat | 1/5 | done (viewer capture) | public/img/hero-light.webp |
+| order-photo | "How to order" step 1: hand photographing a clean window switch on a light counter (replaces the stained fuel pump) | 1/5 | done (viewer capture) | public/img/order-photo.webp |
+Shop section: fans.webp and stock.webp replaced by real Google Maps photos switch.webp (window switch on the shop's bill book, rotated so the bill reads upright, watermark cropped) and sensor.webp (oxygen sensor with the shop's label).

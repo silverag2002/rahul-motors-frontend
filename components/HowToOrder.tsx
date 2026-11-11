@@ -4,8 +4,8 @@ import { askMessage, whatsappLink } from "@/lib/shop";
 
 const STEPS = [
   {
-    img: "/img/whatsapp.webp",
-    alt: "A hand holding a phone, taking a photo of an old fuel pump on the counter",
+    img: "/img/order-photo.webp",
+    alt: "A hand holding a phone, taking a photo of a window switch on the counter",
     title: "Send a photo or the part name",
     body: "WhatsApp us a photo of the old part, the number printed on it, or just your car and model. A link from this website works too.",
   },
