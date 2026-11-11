@@ -1,5 +1,6 @@
 import { ArrowUpRight, Clock, Mail, MapPin, Phone } from "lucide-react";
 import OpenNow from "./OpenNow";
+import HowToReach from "./HowToReach";
 import InquiryForm from "./InquiryForm";
 import WhatsAppIcon from "./WhatsAppIcon";
 import { SHOP, askMessage, mailtoLink, telLink, whatsappLink } from "@/lib/shop";
@@ -90,6 +91,9 @@ export default function VisitShop() {
             </div>
           </div>
         </div>
+      </div>
+      <div className="shell mt-10 md:mt-14">
+        <HowToReach />
       </div>
     </section>
   );

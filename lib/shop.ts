@@ -17,7 +17,8 @@ export const SHOP = {
     region: "West Bengal",
     postcode: "700017",
   },
-  geo: { lat: 22.5488309, lng: 88.3615658 },
+  /** The shop's pin on Google Maps. */
+  geo: { lat: 22.5493414, lng: 88.3621979 },
   mapsLink: "https://maps.app.goo.gl/uDs9Hsg248Akzt6G9",
   /** Opening hours as people read them. */
   hours: [
@@ -73,3 +74,19 @@ export function shopCode(id: number) {
 export function askForType(typeName: string, maker?: string) {
   return `Hello Rahul Motors, I am looking for a ${typeName.toLowerCase()}${maker ? ` for a ${maker}` : ""}.\n\nCar and model:\nYear:\n`;
 }
+
+/** Opens Uber with the shop already set as the drop-off. */
+export const uberLink =
+  "https://m.uber.com/looking?drop%5B0%5D=" +
+  encodeURIComponent(
+    JSON.stringify({ latitude: SHOP.geo.lat, longitude: SHOP.geo.lng, addressLine1: SHOP.name, addressLine2: `${SHOP.address.line1}, ${SHOP.address.line2}` }),
+  );
+
+/** Google Maps directions to the shop from wherever the visitor is. */
+export const directionsLink = `https://www.google.com/maps/dir/?api=1&destination=${SHOP.geo.lat},${SHOP.geo.lng}`;
+
+/**
+ * Buses that stop at Mollick Bazar Crossing on A.J.C. Bose Road (same list as
+ * the Hemant Motors site, plus 202). Routes change, so the page says to check.
+ */
+export const BUS_ROUTES = ["21", "21/1", "45A", "45B", "202", "218", "221", "223", "227", "230", "234", "KB-21", "S-108", "S-125", "S-178"];

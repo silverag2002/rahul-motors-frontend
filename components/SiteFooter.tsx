@@ -18,6 +18,7 @@ export default function SiteFooter({ types = [], makers = [] }: { types?: PartTy
         { href: "/#order", label: "How to order" },
         { href: "/#questions", label: "Questions" },
         { href: "/#visit", label: "Address and map" },
+        { href: "/#reach", label: "How to reach us" },
       ],
     },
   ].filter((c) => c.links.length);

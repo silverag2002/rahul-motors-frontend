@@ -1,4 +1,4 @@
-import { SHOP } from "./shop";
+import { BUS_ROUTES, SHOP } from "./shop";
 
 // Questions people ask at the counter and on WhatsApp. Only things the shop
 // has confirmed go here.
@@ -42,6 +42,10 @@ export const FAQS: Faq[] = [
   {
     q: "Can I come to the shop?",
     a: `Yes, we are at ${SHOP.address.line1}, ${SHOP.address.line2}. Bring the old part if you can; it is the quickest way to match it.`,
-    link: { href: "/#visit", label: "Map and directions" },
+    link: { href: "/#reach", label: "How to reach us" },
+  },
+  {
+    q: "Which buses and metro go there?",
+    a: `Buses that stop at Mollick Bazar Crossing on A.J.C. Bose Road include ${BUS_ROUTES.join(", ")}. The nearest metro is Park Street (Blue Line), about 1.5 km away. Routes change from time to time, so check before you travel.`,
   },
 ];
