@@ -44,15 +44,12 @@ export default function TheShop() {
         </div>
 
         <figure>
-          <div className="grid h-[400px] grid-cols-[0.8fr_1fr] grid-rows-2 gap-2.5 sm:h-[520px] md:gap-3 lg:h-[560px]">
-            <div className="relative row-span-2 overflow-hidden rounded-[16px] bg-raised">
-              <Image src="/img/shop/front.webp" alt="The front of Rahul Motors at night, with its lit red sign and the counter inside" fill sizes="(max-width: 1024px) 45vw, 280px" className="object-cover" />
+          <div className="grid h-[380px] grid-cols-2 gap-2.5 sm:h-[500px] md:gap-3 lg:h-[540px]">
+            <div className="relative overflow-hidden rounded-[16px] bg-raised">
+              <Image src="/img/shop/front.webp" alt="The front of Rahul Motors at night, with its lit red sign and the counter inside" fill sizes="(max-width: 1024px) 50vw, 320px" className="object-cover" />
             </div>
             <div className="relative overflow-hidden rounded-[16px] bg-raised">
-              <Image src="/img/shop/switch.webp" alt="A power window master switch on the shop’s bill book" fill sizes="(max-width: 1024px) 55vw, 340px" className="object-cover" />
-            </div>
-            <div className="relative overflow-hidden rounded-[16px] bg-raised">
-              <Image src="/img/shop/sensor.webp" alt="An oxygen sensor for a Honda CR-V with the shop’s label" fill sizes="(max-width: 1024px) 55vw, 340px" className="object-cover" />
+              <Image src="/img/shop/inside.webp" alt="Inside Rahul Motors: the counter and racks of boxed parts" fill sizes="(max-width: 1024px) 50vw, 320px" className="object-cover" />
             </div>
           </div>
           <figcaption className="mt-3 text-[13px] text-ink-3">Photos from the shop’s Google Maps listing.</figcaption>
