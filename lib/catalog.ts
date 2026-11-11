@@ -80,11 +80,34 @@ async function fetchPage(page: number): Promise<{ data: RawProduct[]; pageCount:
   return { data: body?.data ?? [], pageCount: body?.meta?.pageCount ?? 1 };
 }
 
-function summarise(parts: Part[]): Catalog {
+/**
+ * The shop's category photos, by part type. Optional: if the server does not
+ * send them (or the call fails) the site simply shows no category photos.
+ */
+async function fetchCategoryImages(): Promise<Map<string, Photo>> {
+  const out = new Map<string, Photo>();
+  try {
+    const res = await fetch(`${API_BASE_URL}/public/categories`, { next: { revalidate: CATALOG_REVALIDATE, tags: ["catalog"] } });
+    if (!res.ok) return out;
+    const body = await res.json();
+    for (const c of (body?.data ?? []) as { name?: string; image?: RawImage & { mime?: string } | null }[]) {
+      if (!c?.name || !isRealName(c.name) || !c.image?.url) continue;
+      if (c.image.mime && !c.image.mime.startsWith("image/")) continue;
+      const photo = toPhoto(c.image);
+      const slug = partTypeOf(c.name).slug;
+      if (photo && !out.has(slug)) out.set(slug, photo);
+    }
+  } catch {
+    // no photos is fine
+  }
+  return out;
+}
+
+function summarise(parts: Part[], images: Map<string, Photo> = new Map()): Catalog {
   const types = new Map<string, PartTypeSummary>();
   const makers = new Map<string, MakerSummary>();
   for (const part of parts) {
-    const t = types.get(part.typeSlug) ?? { name: part.type, slug: part.typeSlug, family: part.family, count: 0, photo: null, makers: [] };
+    const t = types.get(part.typeSlug) ?? { name: part.type, slug: part.typeSlug, family: part.family, count: 0, photo: null, image: images.get(part.typeSlug) ?? null, makers: [] };
     t.count += 1;
     if (!t.photo && part.photo) t.photo = part.photo;
     if (part.makerSlug && !t.makers.includes(part.makerSlug)) t.makers.push(part.makerSlug);
@@ -110,13 +133,13 @@ function summarise(parts: Part[]): Catalog {
  * cached page is kept instead of being replaced with an empty one.
  */
 export const getCatalog = cache(async (): Promise<Catalog> => {
-  const first = await fetchPage(1);
+  const [first, images] = await Promise.all([fetchPage(1), fetchCategoryImages()]);
   const rest = await Promise.all(
     Array.from({ length: Math.max(0, first.pageCount - 1) }, (_, i) => fetchPage(i + 2)),
   );
   const raw = [first, ...rest].flatMap((p) => p.data);
   const parts = raw.map(toPart).filter((p): p is Part => p !== null);
-  return summarise(parts);
+  return summarise(parts, images);
 });
 
 /** For the build and the sitemap: an empty list instead of an error. */

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { Menu, Phone, Search, X } from "lucide-react";
 import Brand from "./Brand";
 import ThemeToggle from "./ThemeToggle";
@@ -100,8 +101,11 @@ export default function SiteHeader() {
         </div>
       </div>
 
-      {open && (
-        <div className="fixed inset-x-0 top-[68px] bottom-0 z-40 overflow-y-auto border-t border-line bg-paper lg:hidden">
+      {/* Drawn at the page level: the header's blur would otherwise shrink a
+          fixed panel to the header's own height, so the menu never showed. */}
+      {open &&
+        createPortal(
+        <div className="fixed inset-x-0 top-[68px] bottom-0 z-[45] overflow-y-auto border-t border-line bg-paper lg:hidden">
           <nav className="shell flex flex-col py-3" aria-label="Menu">
             {LINKS.map((l) => (
               <Link key={l.href} href={l.href} onClick={() => setOpen(false)} className="border-b border-line py-4 font-display text-[22px] font-semibold tracking-[-0.01em] text-ink">
@@ -119,8 +123,9 @@ export default function SiteHeader() {
               ))}
             </div>
           </nav>
-        </div>
-      )}
+        </div>,
+          document.body,
+        )}
     </header>
   );
 }

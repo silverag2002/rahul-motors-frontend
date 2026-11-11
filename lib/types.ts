@@ -36,6 +36,8 @@ export interface PartTypeSummary {
   count: number;
   /** A real photo from one of the parts, for tiles. */
   photo: Photo | null;
+  /** The shop's own photo for this category, uploaded in the admin panel. */
+  image?: Photo | null;
   makers: string[];
 }
 

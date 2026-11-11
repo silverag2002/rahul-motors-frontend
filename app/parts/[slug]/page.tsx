@@ -27,7 +27,8 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   if (!type) return { title: "Part type not found" };
   const makers = catalog.makers.filter((m) => type.makers.includes(m.slug)).slice(0, 5).map((m) => m.name);
   const description = `${type.name} for ${makers.length ? makers.join(", ") : "Indian cars"} and more, at Rahul Motors, Mullick Bazar, Kolkata. Photos, part numbers and WhatsApp to ask the price. Sent across India.`;
-  const image = TYPE_PHOTOS[slug] ?? (type.photo ? photoSrc(type.photo, 800) : "/og.jpg");
+  const own = type.image ?? type.photo;
+  const image = TYPE_PHOTOS[slug] ?? (own ? photoSrc(own, 800) : "/og.jpg");
   return {
     title: `${type.name} in Kolkata`,
     description,
@@ -45,7 +46,9 @@ export default async function PartTypePage({ params }: { params: Params }) {
   const makers = catalog.makers.filter((m) => type.makers.includes(m.slug));
   const family = FAMILIES.find((f) => f.id === type.family);
   const made = TYPE_PHOTOS[slug];
-  const real = type.photo ? photoSrc(type.photo, 600) : null;
+  // The shop's own category photo first, then a photo from one of the parts.
+  const own = type.image ?? type.photo;
+  const real = own ? photoSrc(own, 600) : null;
 
   return (
     <PageShell catalog={catalog} whatsapp={askForType(type.name)}>
