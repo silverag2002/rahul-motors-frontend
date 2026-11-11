@@ -1,0 +1,60 @@
+// Everything the website says about the shop itself, in one place.
+
+export const SHOP = {
+  name: "Rahul Motors",
+  siteUrl: "https://rahulmotors.in",
+  phones: [
+    { label: "Sales", display: "+91 82401 54155", tel: "+918240154155" },
+    { label: "Service", display: "+91 90383 94734", tel: "+919038394734" },
+  ],
+  whatsapp: { display: "+91 82401 54155", raw: "918240154155" },
+  email: "rahulmotors08@gmail.com",
+  address: {
+    line1: "36A, A.J.C. Bose Road",
+    line2: "Mullick Bazar, Kolkata 700017",
+    street: "36A, A.J.C. Bose Road, Mullick Bazar",
+    city: "Kolkata",
+    region: "West Bengal",
+    postcode: "700017",
+  },
+  geo: { lat: 22.5488309, lng: 88.3615658 },
+  mapsLink: "https://maps.app.goo.gl/uDs9Hsg248Akzt6G9",
+  mapsEmbed:
+    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d845.3505747175014!2d88.36156583328685!3d22.548830941506473!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a02774aa3b3c63d%3A0x33fca4435b441b2e!2sRAHUL%20MOTORS!5e0!3m2!1sen!2sin!4v1779022219307!5m2!1sen!2sin",
+} as const;
+
+export function whatsappLink(message: string) {
+  return `https://wa.me/${SHOP.whatsapp.raw}?text=${encodeURIComponent(message)}`;
+}
+
+export function telLink(tel: string) {
+  return `tel:${tel.replace(/\s/g, "")}`;
+}
+
+export function mailtoLink(subject: string, body = "") {
+  return `mailto:${SHOP.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
+
+/** The message a WhatsApp button opens with. */
+export function askMessage(part?: { type: string; name: string; maker?: string | null; partNo?: string | null; id?: number; url?: string }) {
+  if (!part) return "Hello Rahul Motors, I am looking for a part.\n\nCar and model:\nPart needed:\n";
+  const lines = [
+    "Hello Rahul Motors, is this part available?",
+    "",
+    `Part: ${part.type}`,
+    `For: ${[part.maker, part.name].filter(Boolean).join(" ")}`,
+  ];
+  if (part.partNo) lines.push(`Part no: ${part.partNo}`);
+  if (part.id) lines.push(`Shop code: ${shopCode(part.id)}`);
+  if (part.url) lines.push("", part.url);
+  return lines.join("\n");
+}
+
+/** The code printed on the shop's labels: RM + the part id in six digits. */
+export function shopCode(id: number) {
+  return `RM${String(id).padStart(6, "0")}`;
+}
+
+export function askForType(typeName: string, maker?: string) {
+  return `Hello Rahul Motors, I am looking for a ${typeName.toLowerCase()}${maker ? ` for a ${maker}` : ""}.\n\nCar and model:\nYear:\n`;
+}

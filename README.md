@@ -1,36 +1,24 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Rahul Motors website (rahulmotors.in)
 
-## Getting Started
+Next.js 16 site for the shop's public parts catalogue. No prices or stock are shown; every part has a WhatsApp "ask" button.
 
-First, run the development server:
+## How it works
+- `lib/catalog.ts` reads the whole public list from the shop's server (`/api/public/products`, 200 per page) and keeps it for 5 minutes. Every page is built from that one list.
+- `lib/names.ts` tidies what is typed at the counter: maker spellings (RENULT → Renault, V.W → Volkswagen), misspelt part types (IGNIATION COIL → Ignition coil) and test entries like "&&&". The database itself is never changed.
+- `lib/search.ts` matches every typed word against part type, car model, maker and part number, with common shop spellings folded ("break" → brake, "I-10" = i10).
+- `/api/catalog` sends a packed copy of the list to the browser for instant search (`lib/compact.ts`).
+- `/api/public/*` passes the "Can't find your part?" form through to the shop's server, which emails the shop.
 
+## Pages
+`/` home · `/products` search with filters (kept in the address) · `/parts` and `/parts/<type>` · `/cars` and `/cars/<maker>` · `/part/<id>-<name>` single part with all photos · sitemap and robots.
+
+## Look
+Graphite and brass from the gold RM badge. Bricolage Grotesque for headings, Instrument Sans for text. Light by default; dark with the toggle in the header (remembered per visitor). Photos in `public/img` (hero, ordering steps, 12 part tiles) were made with ChatGPT; prompts and attempts are in `.claude/image-gen-log.md`. Favicon, app icon and share card (`public/og.jpg`) are made from `public/logo.png`.
+
+## Run
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
+npm run build && npm start
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+`RAHUL_MOTORS_API_URL` (or `NEXT_PUBLIC_API_URL`) points at another API; it defaults to the live public one.

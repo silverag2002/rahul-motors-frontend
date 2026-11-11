@@ -1,41 +1,99 @@
-import type { Metadata } from "next";
-import { Saira, Saira_Condensed } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Bricolage_Grotesque, Instrument_Sans } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/contexts/ThemeContext";
+import { SHOP } from "@/lib/shop";
 
-const saira = Saira({
+const head = Bricolage_Grotesque({
   subsets: ["latin"],
-  variable: "--font-saira",
+  variable: "--font-head",
+  axes: ["opsz"],
   display: "swap",
 });
 
-const condensed = Saira_Condensed({
+const body = Instrument_Sans({
   subsets: ["latin"],
-  weight: ["600", "700", "800"],
-  variable: "--font-condensed",
+  variable: "--font-body",
   display: "swap",
 });
+
+const description =
+  "Car electrical and engine parts in Mullick Bazar, Kolkata: power window switches, fuel pumps, ignition coils, radiator fans, sensors and wiper parts for Hyundai, Maruti, Mahindra, Honda, Tata and more. Ask on WhatsApp, sent across India.";
 
 export const metadata: Metadata = {
-  title: "Rahul Motors — Genuine Auto Parts & Accessories",
-  description:
-    "Shop genuine auto parts online. Browse 1400+ parts across all leading car brands — sensors, switches, filters, pumps and more. Inquire instantly via WhatsApp, call or email.",
-  keywords: ["auto parts", "car parts", "TATA spares", "Mahindra spares", "Rahul Motors", "genuine parts"],
+  metadataBase: new URL(SHOP.siteUrl),
+  title: {
+    default: "Rahul Motors | Car Electrical & Engine Parts, Mullick Bazar, Kolkata",
+    template: "%s · Rahul Motors",
+  },
+  description,
+  keywords: [
+    "Rahul Motors",
+    "Mullick Bazar car parts",
+    "car spare parts Kolkata",
+    "power window switch",
+    "fuel pump assembly",
+    "ignition coil",
+    "radiator fan",
+    "oxygen sensor",
+    "car parts delivery India",
+  ],
+  openGraph: {
+    title: "Rahul Motors: car electrical and engine parts, Mullick Bazar, Kolkata",
+    description,
+    url: SHOP.siteUrl,
+    siteName: SHOP.name,
+    images: [{ url: "/og.jpg", width: 1200, height: 630 }],
+    locale: "en_IN",
+    type: "website",
+  },
+  twitter: { card: "summary_large_image" },
+  alternates: { canonical: "/" },
+  formatDetection: { telephone: true, address: true },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#f4f4f1",
+};
+
+// Light unless the visitor picked dark with the toggle; set before anything paints.
+const themeBoot = `try{var t=localStorage.getItem('rm-theme');document.documentElement.setAttribute('data-theme',t==='dark'?'dark':'light')}catch(e){document.documentElement.setAttribute('data-theme','light')}`;
+
+const localBusiness = {
+  "@context": "https://schema.org",
+  "@type": "AutoPartsStore",
+  "@id": `${SHOP.siteUrl}/#shop`,
+  name: SHOP.name,
+  url: SHOP.siteUrl,
+  image: `${SHOP.siteUrl}/og.jpg`,
+  logo: `${SHOP.siteUrl}/icon.png`,
+  telephone: SHOP.phones[0].tel,
+  email: SHOP.email,
+  description,
+  areaServed: [
+    { "@type": "City", name: "Kolkata" },
+    { "@type": "Country", name: "India" },
+  ],
+  hasMap: SHOP.mapsLink,
+  geo: { "@type": "GeoCoordinates", latitude: SHOP.geo.lat, longitude: SHOP.geo.lng },
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: SHOP.address.street,
+    addressLocality: SHOP.address.city,
+    addressRegion: SHOP.address.region,
+    postalCode: SHOP.address.postcode,
+    addressCountry: "IN",
+  },
+  contactPoint: SHOP.phones.map((p) => ({ "@type": "ContactPoint", telephone: p.tel, contactType: p.label.toLowerCase(), areaServed: "IN" })),
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en-IN" suppressHydrationWarning className={`${head.variable} ${body.variable}`}>
       <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `try{var t=localStorage.getItem('rm-theme')||'light';document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light');}`,
-          }}
-        />
+        <script dangerouslySetInnerHTML={{ __html: themeBoot }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusiness) }} />
       </head>
-      <body suppressHydrationWarning className={`${saira.variable} ${condensed.variable} antialiased`}>
-        <ThemeProvider>{children}</ThemeProvider>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
