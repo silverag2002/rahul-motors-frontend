@@ -10,9 +10,9 @@ export const SHOP = {
   whatsapp: { display: "+91 82401 54155", raw: "918240154155" },
   email: "rahulmotors08@gmail.com",
   address: {
-    line1: "36A, A.J.C. Bose Road",
+    line1: "38, A.J.C. Bose Road",
     line2: "Mullick Bazar, Kolkata 700017",
-    street: "36A, A.J.C. Bose Road, Mullick Bazar",
+    street: "38, A.J.C. Bose Road, Mullick Bazar",
     city: "Kolkata",
     region: "West Bengal",
     postcode: "700017",

@@ -47,8 +47,8 @@ export default function Hero({ quick }: { quick: QuickLink[] }) {
         <div className="fade-late relative">
           <div className="relative aspect-[3/2] overflow-hidden rounded-[18px] border border-graphite-line">
             <Image
-              src="/img/hero.webp"
-              alt="Parts on the counter at Rahul Motors: a window switch, an ignition coil, a fuel pump and an oxygen sensor, with racks of boxed parts behind"
+              src="/img/hero-parts.webp"
+              alt="Car parts laid out on a dark mat: a window switch, an ignition coil, a fuel pump, an oxygen sensor, a fan motor, a clock spring, a relay and a blower motor"
               fill
               priority
               sizes="(max-width: 1024px) 100vw, 560px"

@@ -1,7 +1,7 @@
 import { SHOP } from "./shop";
 
 // Questions people ask at the counter and on WhatsApp. Only things the shop
-// has confirmed go here; payment and return answers wait for the owner.
+// has confirmed go here.
 
 export interface Faq {
   q: string;
@@ -22,6 +22,14 @@ export const FAQS: Faq[] = [
     q: "How do I know a part fits my car?",
     a: "Send us a photo of your old part and the number printed on it, or your car, model and year. We check the side, the plug and the version with you before you order.",
     link: { href: "/fit-guide", label: "How to find the right part" },
+  },
+  {
+    q: "How can I pay?",
+    a: "Any way you like: cash, UPI, card or bank transfer.",
+  },
+  {
+    q: "Can I return or exchange a part?",
+    a: "Yes, for a genuine reason. We check the part and the reason first, then return or exchange it. Ask on WhatsApp and we will tell you how.",
   },
   {
     q: "Do you send parts outside Kolkata?",

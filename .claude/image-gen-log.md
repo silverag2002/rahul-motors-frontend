@@ -52,3 +52,9 @@ Chrome blocked automatic downloads from chatgpt.com after 3 files, so 7 images w
 | guide-pins | /fit-guide step 2 | 1/5 | done (viewer capture) | public/img/guide/pins.webp |
 
 Real shop photos (not generated): public/img/shop/{front,sign,counter}.webp, taken from the shop's Google Maps listing, lightly brightened and sharpened; crops avoid people's faces.
+
+# Image gen 2026-11-11 (round 4: user said the hero was not good)
+| id | slot | attempts | status | file |
+|----|------|----------|--------|------|
+| hero-parts | home hero + right half of og.jpg | 1/5 (2 options made: flat-lay on dark mat, and a shop counter scene; flat-lay chosen) | done (viewer capture) | public/img/hero-parts.webp |
+New file name so cached copies of the old hero.webp are not served.
