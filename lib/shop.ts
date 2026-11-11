@@ -19,6 +19,21 @@ export const SHOP = {
   },
   geo: { lat: 22.5488309, lng: 88.3615658 },
   mapsLink: "https://maps.app.goo.gl/uDs9Hsg248Akzt6G9",
+  /** Opening hours as people read them. */
+  hours: [
+    { days: "Monday to Saturday", time: "9 am to 9 pm" },
+    { days: "Sunday", time: "9 am to 3 pm" },
+  ],
+  /** Same hours by weekday (0 = Sunday), in 24-hour Kolkata time, for "Open now" and search engines. */
+  week: [
+    [9, 15],
+    [9, 21],
+    [9, 21],
+    [9, 21],
+    [9, 21],
+    [9, 21],
+    [9, 21],
+  ] as [number, number][],
   mapsEmbed:
     "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d845.3505747175014!2d88.36156583328685!3d22.548830941506473!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a02774aa3b3c63d%3A0x33fca4435b441b2e!2sRAHUL%20MOTORS!5e0!3m2!1sen!2sin!4v1779022219307!5m2!1sen!2sin",
 } as const;

@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
-import { Camera, Phone } from "lucide-react";
+import { ArrowRight, Camera, ListChecks, Phone } from "lucide-react";
 import PageShell from "@/components/PageShell";
 import { PartGrid } from "@/components/PartCard";
 import PartGallery from "@/components/PartGallery";
 import SectionHead from "@/components/SectionHead";
 import WhatsAppIcon from "@/components/WhatsAppIcon";
 import { fetchPartPhotos, getCatalogForPage, getCatalogOrEmpty } from "@/lib/catalog";
+import { fitNotes } from "@/lib/fit";
 import { idFromPartSlug, makerHref, partHref, typeHref } from "@/lib/links";
 import { SHOP, askMessage, shopCode, telLink, whatsappLink } from "@/lib/shop";
 import { photoSrc, type Catalog, type Part } from "@/lib/types";
@@ -63,6 +64,7 @@ export default async function PartPage({ params }: { params: Params }) {
   const ask = askMessage({ ...part, url });
   const title = `${part.type} for ${[part.maker, part.name].filter(Boolean).join(" ")}`;
   const more = related(catalog, part);
+  const fit = fitNotes(part.name, part.type);
 
   const rows = [
     { label: "Part", value: <Link href={typeHref(part.typeSlug)} className="font-semibold text-ink underline decoration-line-strong underline-offset-4 hover:decoration-ink">{part.type}</Link> },
@@ -105,6 +107,15 @@ export default async function PartPage({ params }: { params: Params }) {
           <p className="text-[15px] font-semibold text-brass-deep">{part.type}</p>
           <h1 className="display mt-1.5 text-[34px] text-ink md:text-[44px]">{part.name}</h1>
           {part.maker && <p className="mt-2 text-[17px] text-ink-3">For {part.maker}</p>}
+          {fit.length > 0 && (
+            <ul className="mt-4 flex flex-wrap gap-1.5" aria-label="Fit details">
+              {fit.map((f) => (
+                <li key={f.label} className="rounded-[8px] border border-line-strong bg-raised px-2.5 py-1 text-[14px] font-semibold text-ink">
+                  {f.label}
+                </li>
+              ))}
+            </ul>
+          )}
 
           <div className="mt-6 grid gap-2.5 sm:grid-cols-2">
             <a href={whatsappLink(ask)} target="_blank" rel="noopener" className="press inline-flex h-[52px] items-center justify-center gap-2 rounded-[12px] bg-whatsapp text-[16px] font-semibold text-whatsapp-ink">
@@ -124,10 +135,30 @@ export default async function PartPage({ params }: { params: Params }) {
             ))}
           </dl>
 
+          {fit.length > 0 && (
+            <div className="mt-4 rounded-[16px] border border-line bg-raised px-4 py-4">
+              <p className="flex items-center gap-2 text-[15.5px] font-semibold text-ink">
+                <ListChecks className="h-5 w-5 text-brass-deep" /> Check before you order
+              </p>
+              <ul className="mt-2.5 space-y-1.5 text-[15px] leading-relaxed text-ink-2">
+                {fit.map((f) => (
+                  <li key={f.label} className="flex gap-2.5">
+                    <span className="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-brass" aria-hidden="true" />
+                    {f.check}
+                  </li>
+                ))}
+              </ul>
+              <Link href="/fit-guide" className="mt-3 inline-flex items-center gap-1.5 text-[14.5px] font-semibold text-brass-deep hover:underline">
+                How to check your old part <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          )}
+
           <div className="mt-4 flex gap-3 rounded-[16px] bg-brass-soft px-4 py-4 text-[15px] leading-relaxed text-ink-2">
             <Camera className="mt-0.5 h-5 w-5 shrink-0 text-brass-deep" />
             <p>
-              <span className="font-semibold text-ink">Not sure it fits?</span> Send a photo of your old part with the WhatsApp message. We will check the side, the plug and the version with you.
+              <span className="font-semibold text-ink">Not sure it fits?</span> Send a photo of your old part with the WhatsApp message. We will check the side, the plug and the version with you.{" "}
+              <Link href="/fit-guide" className="font-semibold text-brass-deep underline underline-offset-2">What to photograph</Link>
             </p>
           </div>
         </div>

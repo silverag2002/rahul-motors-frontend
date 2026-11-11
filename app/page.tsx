@@ -7,6 +7,9 @@ import PageShell from "@/components/PageShell";
 import { PartGrid } from "@/components/PartCard";
 import PartTypeTiles, { MoreTypes } from "@/components/PartTypeTiles";
 import SectionHead from "@/components/SectionHead";
+import Faq from "@/components/Faq";
+import Symptoms from "@/components/Symptoms";
+import TheShop from "@/components/TheShop";
 import VisitShop from "@/components/VisitShop";
 import { getCatalogForPage } from "@/lib/catalog";
 import { moreTypes, previewParts, quickLinks, tileTypes } from "@/lib/home";
@@ -22,6 +25,7 @@ export default async function Home() {
   return (
     <PageShell catalog={catalog}>
       <Hero quick={quickLinks(catalog)} />
+      <Symptoms types={catalog.types} />
 
       {tiles.length > 0 && (
         <section className="pt-16 md:pt-24">
@@ -61,6 +65,8 @@ export default async function Home() {
       )}
 
       <HowToOrder />
+      <TheShop />
+      <Faq />
       <VisitShop />
     </PageShell>
   );

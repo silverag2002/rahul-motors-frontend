@@ -13,6 +13,7 @@ const LINKS = [
   { href: "/products", label: "All parts" },
   { href: "/parts", label: "Part types" },
   { href: "/cars", label: "Car makers" },
+  { href: "/fit-guide", label: "Fit guide" },
   { href: "/#order", label: "How to order" },
   { href: "/#visit", label: "Visit" },
 ];

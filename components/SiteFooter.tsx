@@ -14,7 +14,9 @@ export default function SiteFooter({ types = [], makers = [] }: { types?: PartTy
         { href: "/products", label: "All parts" },
         { href: "/parts", label: "Every part type" },
         { href: "/cars", label: "Every car maker" },
+        { href: "/fit-guide", label: "Find the right part" },
         { href: "/#order", label: "How to order" },
+        { href: "/#questions", label: "Questions" },
         { href: "/#visit", label: "Address and map" },
       ],
     },
@@ -28,6 +30,9 @@ export default function SiteFooter({ types = [], makers = [] }: { types?: PartTy
             <Brand onDark />
             <p className="mt-5 max-w-xs text-[15px] leading-relaxed text-on-graphite-2">
               {SHOP.address.line1}, {SHOP.address.line2}
+            </p>
+            <p className="mt-3 text-[14.5px] leading-relaxed text-on-graphite-2">
+              {SHOP.hours.map((h) => `${h.days} ${h.time}`).join(" · ")}
             </p>
             <div className="mt-4 flex flex-col gap-1 text-[15px]">
               {SHOP.phones.map((p) => (

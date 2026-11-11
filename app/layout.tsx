@@ -74,6 +74,10 @@ const localBusiness = {
     { "@type": "Country", name: "India" },
   ],
   hasMap: SHOP.mapsLink,
+  openingHoursSpecification: [
+    { dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"], opens: `${String(SHOP.week[1][0]).padStart(2, "0")}:00`, closes: `${SHOP.week[1][1]}:00` },
+    { dayOfWeek: "Sunday", opens: `${String(SHOP.week[0][0]).padStart(2, "0")}:00`, closes: `${SHOP.week[0][1]}:00` },
+  ],
   geo: { "@type": "GeoCoordinates", latitude: SHOP.geo.lat, longitude: SHOP.geo.lng },
   address: {
     "@type": "PostalAddress",

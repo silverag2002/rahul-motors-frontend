@@ -33,3 +33,22 @@ Approved limit raised by the user. Used: 6 more (16 total). Same part-tile style
 | cat-wiper-linkage | tile + /parts/wiper-linkage | 1/5 | done | public/img/cat-wiper-linkage.webp |
 | cat-water-pump | tile + /parts/water-pump | 1/5 | done | public/img/cat-water-pump.webp |
 | cat-blower-motor | tile + /parts/blower-motor | 1/5 | done | public/img/cat-blower-motor.webp |
+
+# Image gen 2026-11-11 (round 3, user asked for the storytelling ideas to be built)
+Autonomous. 10 more (26 total). Style anchor: realistic everyday phone photo, bright soft daylight, clean, no text/logos/faces.
+Chrome blocked automatic downloads from chatgpt.com after 3 files, so 7 images were saved by capturing the full-size viewer (1349x896) and cropping 4px off each edge.
+
+| id | slot | attempts | status | file |
+|----|------|----------|--------|------|
+| sym-window | home "What's wrong" card | 1/5 | done | public/img/sym/window.webp |
+| sym-overheat | same | 1/5 | done | public/img/sym/overheat.webp |
+| sym-nostart | same | 1/5 | done | public/img/sym/nostart.webp |
+| sym-engine-light | same | 1/5 | done (viewer capture) | public/img/sym/engine-light.webp |
+| sym-ac | same | 1/5 | done (viewer capture) | public/img/sym/ac.webp |
+| sym-wiper | same | 1/5 | done (viewer capture) | public/img/sym/wiper.webp |
+| sym-horn-airbag | same | 1/5 | done (viewer capture) | public/img/sym/horn-airbag.webp |
+| sym-lock | same | 1/5 | done (viewer capture) | public/img/sym/lock.webp |
+| guide-number | /fit-guide step 1 | 1/5 | done (viewer capture) | public/img/guide/number.webp |
+| guide-pins | /fit-guide step 2 | 1/5 | done (viewer capture) | public/img/guide/pins.webp |
+
+Real shop photos (not generated): public/img/shop/{front,sign,counter}.webp, taken from the shop's Google Maps listing, lightly brightened and sharpened; crops avoid people's faces.

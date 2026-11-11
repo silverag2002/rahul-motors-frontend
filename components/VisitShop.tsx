@@ -1,4 +1,5 @@
-import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
+import { ArrowUpRight, Clock, Mail, MapPin, Phone } from "lucide-react";
+import OpenNow from "./OpenNow";
 import InquiryForm from "./InquiryForm";
 import WhatsAppIcon from "./WhatsAppIcon";
 import { SHOP, askMessage, mailtoLink, telLink, whatsappLink } from "@/lib/shop";
@@ -36,6 +37,18 @@ export default function VisitShop() {
                 Directions <ArrowUpRight className="h-4 w-4" />
               </a>
             </div>
+            <div className="flex items-start gap-3.5 border-b border-line p-5">
+              <Clock className="mt-0.5 h-5 w-5 shrink-0 text-brass-deep" />
+              <div className="min-w-0 flex-1">
+                {SHOP.hours.map((h) => (
+                  <p key={h.days} className="flex flex-wrap justify-between gap-x-4 text-[15.5px]">
+                    <span className="text-ink-2">{h.days}</span>
+                    <span className="font-semibold text-ink tabular">{h.time}</span>
+                  </p>
+                ))}
+                <OpenNow className="mt-2" />
+              </div>
+            </div>
             <div className="relative aspect-[16/10] bg-sunken">
               <iframe
                 src={SHOP.mapsEmbed}
@@ -68,6 +81,14 @@ export default function VisitShop() {
 
         <div className="min-w-0 lg:pt-[92px]">
           <InquiryForm />
+          <div className="mt-4 hidden items-center gap-5 rounded-[18px] border border-line bg-raised p-5 md:flex">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/img/whatsapp-qr.svg" alt="QR code that opens a WhatsApp chat with Rahul Motors" width={112} height={112} className="h-28 w-28 shrink-0 rounded-[8px]" />
+            <div>
+              <p className="text-[16px] font-semibold text-ink">On a computer?</p>
+              <p className="mt-1 text-[15px] leading-relaxed text-ink-3">Scan this with your phone’s camera to chat with us on WhatsApp, then send photos of the part from your phone.</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
